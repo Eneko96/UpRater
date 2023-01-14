@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Rate } from '../rate/rate.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -10,4 +10,7 @@ export class User {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Rate, (rate) => rate.user, { eager: true })
+  rates: Rate[];
 }
