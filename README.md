@@ -34,11 +34,8 @@ $ yarn run test:cov
 ## Docker Instance Postgres
   
   ```bash
-  # build image
-  $ docker build . -t local-postgres
-
-  # run container 
-  $ docker run --name postgres -p 5432:5432 -d postgres
+  # build and run
+  $ docker-compose up --build -d
   ```
 
 ## Docker Postgres

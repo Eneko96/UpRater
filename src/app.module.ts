@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { RateModule } from './rate/rate.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -15,6 +16,14 @@ import { RateModule } from './rate/rate.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
+        console.log(
+          configService.get('STAGE'),
+          configService.get('DB_HOST'),
+          configService.get('DB_PORT'),
+          configService.get('DB_USERNAME'),
+          configService.get('DB_PASSWORD'),
+          configService.get('DB_DATABASE'),
+        );
         const isProduction = configService.get('STAGE') === 'prod';
         return {
           ssl: isProduction,
@@ -35,5 +44,6 @@ import { RateModule } from './rate/rate.module';
     AuthModule,
     RateModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
