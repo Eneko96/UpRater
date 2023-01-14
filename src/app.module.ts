@@ -16,14 +16,6 @@ import { AppController } from './app.controller';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        console.log(
-          configService.get('STAGE'),
-          configService.get('DB_HOST'),
-          configService.get('DB_PORT'),
-          configService.get('DB_USERNAME'),
-          configService.get('DB_PASSWORD'),
-          configService.get('DB_DATABASE'),
-        );
         const isProduction = configService.get('STAGE') === 'prod';
         return {
           ssl: isProduction,
@@ -31,7 +23,9 @@ import { AppController } from './app.controller';
             ssl: isProduction ? { rejectUnauthorized: false } : null,
           },
           type: 'postgres',
-          host: configService.get('DB_HOST'),
+          host: process.env.DOCKER
+            ? 'host.docker.internal'
+            : configService.get('DB_HOST'),
           port: configService.get('DB_PORT'),
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
