@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
+import { RateModule } from './rate/rate.module';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { configValidationSchema } from './config.schema';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         const isProduction = configService.get('STAGE') === 'prod';
-
+        console.log(configService.get('DB_PASSWORD'));
         return {
           ssl: isProduction,
           extra: {
@@ -33,6 +34,7 @@ import { configValidationSchema } from './config.schema';
       },
     }),
     AuthModule,
+    RateModule,
   ],
 })
 export class AppModule {}

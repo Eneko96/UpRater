@@ -22,7 +22,6 @@ export class AuthService {
 
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { username, password } = authCredentialsDto;
-
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -31,9 +30,12 @@ export class AuthService {
       password: hashedPassword,
     });
 
+    console.log({ user });
+
     try {
       await this.usersRepository.save(user);
     } catch (error) {
+      console.log({ error });
       if (error.code === '23505') {
         // Duplicates
         throw new ConflictException('Username already exists');
