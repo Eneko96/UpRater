@@ -23,9 +23,10 @@ import { AppController } from './app.controller';
             ssl: isProduction ? { rejectUnauthorized: false } : null,
           },
           type: 'postgres',
-          host: process.env.DOCKER
-            ? 'host.docker.internal'
-            : configService.get('DB_HOST'),
+          host:
+            process.env.DOCKER === 'true'
+              ? 'host.docker.internal'
+              : configService.get('DB_HOST'),
           port: configService.get('DB_PORT'),
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
