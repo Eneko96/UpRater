@@ -37,7 +37,6 @@ export class RateRepository {
       reactions: reactions.map((reaction) => Reactions[reaction]),
       user: user,
     });
-    console.log(Reactions, Topics);
     const savedRate = await this.ratesRepository.save(createRate);
     this.logger.verbose(
       `User "${user.username}" created a new rate. Data: ${JSON.stringify(

@@ -30,12 +30,9 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    console.log({ user });
-
     try {
       await this.usersRepository.save(user);
     } catch (error) {
-      console.log({ error });
       if (error.code === '23505') {
         // Duplicates
         throw new ConflictException('Username already exists');

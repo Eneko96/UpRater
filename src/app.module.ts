@@ -16,7 +16,6 @@ import { RateModule } from './rate/rate.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         const isProduction = configService.get('STAGE') === 'prod';
-        console.log(configService.get('DB_PASSWORD'));
         return {
           ssl: isProduction,
           extra: {
