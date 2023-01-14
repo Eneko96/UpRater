@@ -30,6 +30,7 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
+
 ## Docker Instance Postgres
   
   ```bash
@@ -39,3 +40,10 @@ $ yarn run test:cov
   # run container 
   $ docker run --name postgres -p 5432:5432 -d postgres
   ```
+
+## Docker Postgres
+
+```bash
+# build and run container (env variables not working, that's why they are here, still need to figure that out)
+$ docker run --name postgres -p 5432:5432 -e POSTGRES_DB=uprater -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d postgres
+```
