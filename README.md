@@ -30,7 +30,6 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
-
 ## Docker Instance Postgres
   
   ```bash
