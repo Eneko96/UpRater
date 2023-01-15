@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
@@ -12,7 +13,7 @@ import { AppController } from './app.controller';
       envFilePath: [`.env.stage.${process.env.STAGE}`],
       validationSchema: configValidationSchema,
     }),
-    TypeOrmModule.forRootAsync({
+    MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
@@ -22,11 +23,8 @@ import { AppController } from './app.controller';
           extra: {
             ssl: isProduction ? { rejectUnauthorized: false } : null,
           },
-          type: 'postgres',
-          host:
-            process.env.DOCKER === 'true'
-              ? 'host.docker.internal'
-              : configService.get('DB_HOST'),
+          type: 'mongodb',
+          host: configService.get('DB_HOST'),
           port: configService.get('DB_PORT'),
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
