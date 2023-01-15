@@ -9,6 +9,8 @@ import { User, UserDocument } from './user.model';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
+// import { CreateProfileDto } from 'src/profile/dto/create-profile.dto';
+// import { Profile } from 'src/profile/profile.entity';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -16,16 +18,26 @@ import { InjectModel } from '@nestjs/mongoose';
 export class AuthService {
   constructor(
     @InjectModel(User.name) private usersRepository: Model<UserDocument>,
+    // @InjectRepository(Profile)
+    // private profilesRepository: Repository<Profile>,
     private jwtService: JwtService,
   ) {}
 
-  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+  async signUp(
+    authCredentialsDto: AuthCredentialsDto,
+    // profileCredentialsDto: CreateProfileDto,
+  ): Promise<void> {
     const { username, password } = authCredentialsDto;
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
+
+    // const profile = this.profilesRepository.create({
+    //   email: profileCredentialsDto.email,
+    // });
     const user = new this.usersRepository({
       username,
       password: hashedPassword,
+      // profile: profile,
     });
 
     try {
