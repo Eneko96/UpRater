@@ -1,0 +1,40 @@
+version: '3'
+services:
+  node:
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    networks:
+      - webnet
+    environment:
+      STAGE: dev
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: task-management
+      POSTGRES_USERNAME: postgres
+    networks:
+      - webnet
+    ports:
+      - '5432:5432'
+  # pgadmin-compose:
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: 'placeholder@example.com'
+  #     PGADMIN_DEFAULT_PASSWORD: 'fakepassword123!'
+  #   ports:
+  #     - '16543:80'
+  #   depends_on:
+  #     - postgres
+
+volumes:
+  dbdata: {}
+networks:
+  webnet:
+    driver: bridge

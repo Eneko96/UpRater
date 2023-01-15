@@ -15,6 +15,7 @@ export class RateRepository {
 
   private logger = new Logger('RateRepository');
 
+  // Not working yet [TODO]
   async findById(id: string): Promise<Rate> {
     const found = await this.ratesRepository.findOne({
       where: { id },
@@ -25,8 +26,8 @@ export class RateRepository {
     return found;
   }
 
-  async find(): Promise<Rate[]> {
-    return this.ratesRepository.find();
+  async find(args?): Promise<Rate[]> {
+    return this.ratesRepository.find(...args);
   }
 
   async save(rate: CreateRateDto, user: User): Promise<Rate> {

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 import { CreateRateDto } from './dto/create-rate.dto';
@@ -20,5 +20,10 @@ export class RateController {
     @GetUser() user: User,
   ): Promise<Rate> {
     return this.rateService.createRate(rate, user);
+  }
+
+  @Get('/my')
+  getMyRates(@GetUser() user: User): Promise<Rate[]> {
+    return this.rateService.getMyRates(user);
   }
 }

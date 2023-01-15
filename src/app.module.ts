@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { RateModule } from './rate/rate.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -22,7 +23,10 @@ import { RateModule } from './rate/rate.module';
             ssl: isProduction ? { rejectUnauthorized: false } : null,
           },
           type: 'postgres',
-          host: configService.get('DB_HOST'),
+          host:
+            process.env.DOCKER === 'true'
+              ? 'host.docker.internal'
+              : configService.get('DB_HOST'),
           port: configService.get('DB_PORT'),
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
@@ -35,5 +39,6 @@ import { RateModule } from './rate/rate.module';
     AuthModule,
     RateModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}

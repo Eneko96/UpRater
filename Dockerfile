@@ -1,6 +1,8 @@
-FROM postgres
-ENV POSTGRES_PASSWORD=postgres
-ENV POSTGRES_DB=task-management
-ENV POSTGRES_USER=postgres
-
-expose 5432
+FROM node:16-alpine
+WORKDIR /usr/src/app
+COPY package.json yarn.lock ./
+RUN yarn install --silent
+COPY . .
+run yarn build
+EXPOSE 3000
+CMD ["node", "dist/main.js"]

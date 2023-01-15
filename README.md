@@ -30,7 +30,6 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
-
 ## Docker Instance Postgres
   
   ```bash
@@ -39,6 +38,12 @@ $ yarn run test:cov
 
   # run container 
   $ docker run --name postgres -p 5432:5432 -d postgres
+
+  # build and run 
+  $ docker-compose up --build -d
+
+  # docker compose for development
+  $ docker-compose -f docker-compose.dev.yml up --build -d
   ```
 
 ## Docker Postgres
