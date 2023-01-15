@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { RateModule } from './rate/rate.module';
 import { AppController } from './app.controller';
-import { ProfileModule } from './profile/profile.module';
+// import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -49,7 +49,7 @@ import { ProfileModule } from './profile/profile.module';
       // },
     }),
     AuthModule,
-    ProfileModule,
+    // ProfileModule,
     RateModule,
   ],
   controllers: [AppController],
