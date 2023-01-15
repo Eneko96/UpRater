@@ -1,16 +1,15 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/user.entity';
-import { Repository } from 'typeorm';
-import { CreateRateDto } from './dto/create-rate.dto';
-import { Rate } from './rate.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Rate, RateDocument } from './rate.model';
 import { Reactions, Topics } from './types';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class RateRepository {
   constructor(
-    @InjectRepository(Rate)
-    private readonly ratesRepository: Repository<Rate>,
+    @InjectModel(Rate.name)
+    private readonly ratesRepository: Model<RateDocument>,
   ) {}
 
   private logger = new Logger('RateRepository');
@@ -27,10 +26,10 @@ export class RateRepository {
   }
 
   async find(args?): Promise<Rate[]> {
-    return this.ratesRepository.find(...args);
+    return this.ratesRepository.find({ ...args });
   }
 
-  async save(rate: CreateRateDto, user: User): Promise<Rate> {
+  async save(rate: Rate, user: User): Promise<Rate> {
     const { topics, reactions, ...rest } = rate;
     const createRate = this.ratesRepository.create({
       ...rest,
@@ -38,12 +37,14 @@ export class RateRepository {
       reactions: reactions.map((reaction) => Reactions[reaction]),
       user: user,
     });
-    const savedRate = await this.ratesRepository.save(createRate);
+    const newRate = new this.ratesRepository(createRate);
+    const result = await newRate.save();
+    //const savedRate = await this.ratesRepository.save(createRate);
     this.logger.verbose(
       `User "${user.username}" created a new rate. Data: ${JSON.stringify(
-        savedRate,
+        result,
       )}`,
     );
-    return savedRate;
+    return result;
   }
 }

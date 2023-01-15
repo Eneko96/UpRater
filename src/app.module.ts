@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -17,22 +16,36 @@ import { AppController } from './app.controller';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const isProduction = configService.get('STAGE') === 'prod';
+        const uri = `mongodb://${configService.get(
+          'DB_HOST',
+        )}:${configService.get('DB_PORT')}/${configService.get('DB_DATABASE')}`;
         return {
-          ssl: isProduction,
-          extra: {
-            ssl: isProduction ? { rejectUnauthorized: false } : null,
-          },
-          type: 'mongodb',
-          host: configService.get('DB_HOST'),
-          port: configService.get('DB_PORT'),
-          username: configService.get('DB_USERNAME'),
-          password: configService.get('DB_PASSWORD'),
-          database: configService.get('DB_DATABASE'),
-          autoLoadEntities: true,
-          synchronize: true,
+          uri,
+          useUnifiedTopology: true,
+          useNewUrlParser: true,
         };
       },
+
+      // useFactory: async (configService: ConfigService) => {
+      //   const isProduction = configService.get('STAGE') === 'prod';
+      //   return {
+      //     ssl: isProduction,
+      //     extra: {
+      //       ssl: isProduction ? { rejectUnauthorized: false } : null,
+      //     },
+      //     type: 'mongodb',
+      //     uri: configService.get('DB_URI'),
+      //     useUnifiedTopology: true,
+      //     useNewUrlParser: true,
+      //     host: configService.get('DB_HOST'),
+      //     port: configService.get('DB_PORT'),
+      //     username: configService.get('DB_USERNAME'),
+      //     password: configService.get('DB_PASSWORD'),
+      //     database: configService.get('DB_DATABASE'),
+      //     autoLoadEntities: true,
+      //     synchronize: true,
+      //   };
+      // },
     }),
     AuthModule,
     RateModule,

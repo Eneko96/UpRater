@@ -4,19 +4,18 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { User } from './user.entity';
+import { User, UserDocument } from './user.model';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    @InjectModel(User.name) private usersRepository: Model<UserDocument>,
     private jwtService: JwtService,
   ) {}
 
@@ -24,17 +23,16 @@ export class AuthService {
     const { username, password } = authCredentialsDto;
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
-
-    const user = this.usersRepository.create({
+    const user = new this.usersRepository({
       username,
       password: hashedPassword,
     });
 
     try {
-      await this.usersRepository.save(user);
+      const newUser = new this.usersRepository(user);
+      await newUser.save({ validateBeforeSave: true });
     } catch (error) {
-      if (error.code === '23505') {
-        // Duplicates
+      if (error.code === 11000) {
         throw new ConflictException('Username already exists');
       } else {
         throw new InternalServerErrorException();
@@ -46,9 +44,9 @@ export class AuthService {
     authCredentialsDto: AuthCredentialsDto,
   ): Promise<{ accessToken: string }> {
     const { username, password } = authCredentialsDto;
-    const user = this.usersRepository.findOne({ where: { username } });
-
-    if (user && (await bcrypt.compare(password, (await user).password))) {
+    const user = await this.usersRepository.findOne({ where: { username } });
+    // compare isn't working,
+    if (user && (await bcrypt.compare(password, user.password))) {
       const payload: JwtPayload = { username };
       const accessToken = await this.jwtService.sign(payload);
       return { accessToken };
