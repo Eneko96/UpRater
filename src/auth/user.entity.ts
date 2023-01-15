@@ -22,7 +22,7 @@ export class User {
   @OneToMany(() => Rate, (rate) => rate.user, { eager: true })
   rates: Rate[];
 
-  @OneToOne((type) => Profile, (profile) => profile.user)
-  @JoinColumn({ name: 'profile_id' })
+  @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
+  @JoinColumn()
   profile: Profile;
 }

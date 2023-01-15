@@ -16,7 +16,6 @@ export class Profile {
   @Column()
   email: string;
 
-  @OneToOne((type) => User, (user) => user.profile, { nullable: true })
-  @JoinColumn({ name: 'user_id' })
+  @OneToOne(() => User, (user) => user.profile)
   user: User;
 }

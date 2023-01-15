@@ -30,10 +30,10 @@ export class ProfileRepository {
 
     // Create the profile and update the user with the profile
     const userFound = await this.usersRepository.findOne({ where: { id } });
-    console.log(userFound);
-    userFound.profile = this.profileEntityRepository.create(createProfile);
-    userFound.profile.user = user;
-    console.log(await this.usersRepository.save(user));
+    // console.log(userFound);
+    // userFound.profile = this.profileEntityRepository.create(createProfile);
+    // userFound.profile.user = user;
+    // console.log(await this.usersRepository.save(user));
 
     return userFound.profile;
   }

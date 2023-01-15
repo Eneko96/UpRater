@@ -1,4 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { CreateProfileDto } from 'src/profile/dto/create-profile.dto';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 
@@ -7,8 +8,11 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
-  signUp(@Body() authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    return this.authService.signUp(authCredentialsDto);
+  signUp(
+    @Body() authCredentialsDto: AuthCredentialsDto,
+    @Body() profileCredentialsDto: CreateProfileDto,
+  ): Promise<void> {
+    return this.authService.signUp(authCredentialsDto, profileCredentialsDto);
   }
 
   @Post('/signin')

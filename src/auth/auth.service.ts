@@ -11,23 +11,35 @@ import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
+import { CreateProfileDto } from 'src/profile/dto/create-profile.dto';
+import { Profile } from 'src/profile/profile.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(Profile)
+    private profilesRepository: Repository<Profile>,
     private jwtService: JwtService,
   ) {}
 
-  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+  async signUp(
+    authCredentialsDto: AuthCredentialsDto,
+    profileCredentialsDto: CreateProfileDto,
+  ): Promise<void> {
     const { username, password } = authCredentialsDto;
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    const profile = this.profilesRepository.create({
+      email: profileCredentialsDto.email,
+    });
+
     const user = this.usersRepository.create({
       username,
       password: hashedPassword,
+      profile: profile,
     });
 
     try {
@@ -47,10 +59,11 @@ export class AuthService {
   ): Promise<{ accessToken: string }> {
     const { username, password } = authCredentialsDto;
     console.log(username);
-    const users = await this.usersRepository.find({
-      where: { username: authCredentialsDto.username },
-    });
-    const user = users[0];
+    const user = await this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.profile', 'profile')
+      .where('user.username = :username', { username })
+      .getOne();
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload: JwtPayload = { username };
