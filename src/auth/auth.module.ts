@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { User, UserSchema } from './user.model';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 import { Profile } from 'src/profile/profile.entity';
 
 @Module({
@@ -23,8 +23,8 @@ import { Profile } from 'src/profile/profile.entity';
         },
       }),
     }),
-    TypeOrmModule.forFeature([User]),
-    TypeOrmModule.forFeature([Profile]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    // TypeOrmModule.forFeature([Profile]),
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
