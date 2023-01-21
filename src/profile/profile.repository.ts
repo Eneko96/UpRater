@@ -3,38 +3,45 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/auth/user.entity';
-import { Repository } from 'typeorm';
-import { CreateProfileDto } from './dto/create-profile.dto';
-import { Profile } from './profile.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User } from 'src/auth/user.model';
+import { UserDocument } from 'src/auth/user.model';
+import { AddToProfileDto } from './dto/create-profile.dto';
+import { Profile, ProfileDocument } from './profile.model';
 
 @Injectable()
 export class ProfileRepository {
   constructor(
-    @InjectRepository(Profile)
-    private readonly profileEntityRepository: Repository<Profile>,
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    @InjectModel(Profile.name)
+    private readonly profileRepository: Model<ProfileDocument>,
+    @InjectModel(User.name)
+    private readonly usersRepository: Model<UserDocument>,
   ) {}
 
   private logger = new Logger('User Data Repository');
 
-  async insert(createProfile: CreateProfileDto, user: User): Promise<Profile> {
-    const { id } = user;
+  async addInfo(addToProfile: AddToProfileDto, user: User): Promise<Profile> {
+    const { username } = user;
     this.logger.verbose(
       `User "${
         user.username
-      }" creating profile object. Filters: ${JSON.stringify(createProfile)}`,
+      }" creating profile object. Filters: ${JSON.stringify(addToProfile)}`,
     );
 
     // Create the profile and update the user with the profile
-    const userFound = await this.usersRepository.findOne({ where: { id } });
     // console.log(userFound);
     // userFound.profile = this.profileEntityRepository.create(createProfile);
     // userFound.profile.user = user;
     // console.log(await this.usersRepository.save(user));
 
-    return userFound.profile;
+    const profileDoc = await this.profileRepository.findOne({
+      username: username,
+    });
+    const profile = new Profile();
+
+    profile.email = profileDoc.email;
+
+    return profile;
   }
 }

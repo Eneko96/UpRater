@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { RateModule } from './rate/rate.module';
 import { AppController } from './app.controller';
-// import { ProfileModule } from './profile/profile.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -26,30 +26,9 @@ import { AppController } from './app.controller';
           useNewUrlParser: true,
         };
       },
-
-      // useFactory: async (configService: ConfigService) => {
-      //   const isProduction = configService.get('STAGE') === 'prod';
-      //   return {
-      //     ssl: isProduction,
-      //     extra: {
-      //       ssl: isProduction ? { rejectUnauthorized: false } : null,
-      //     },
-      //     type: 'mongodb',
-      //     uri: configService.get('DB_URI'),
-      //     useUnifiedTopology: true,
-      //     useNewUrlParser: true,
-      //     host: configService.get('DB_HOST'),
-      //     port: configService.get('DB_PORT'),
-      //     username: configService.get('DB_USERNAME'),
-      //     password: configService.get('DB_PASSWORD'),
-      //     database: configService.get('DB_DATABASE'),
-      //     autoLoadEntities: true,
-      //     synchronize: true,
-      //   };
-      // },
     }),
     AuthModule,
-    // ProfileModule,
+    ProfileModule,
     RateModule,
   ],
   controllers: [AppController],

@@ -1,7 +1,7 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateProfileDto {
+export class AddToProfileDto {
   @IsNotEmpty()
-  @IsEmail()
-  email: string;
+  @IsString()
+  city?: string;
 }
