@@ -47,12 +47,6 @@ export class AuthService {
     try {
       const newUser = new this.usersRepository(user);
       await newUser.save({ validateBeforeSave: true });
-      const profile = new this.profileRepository({
-        email: 'something@some.com',
-        user: user,
-      });
-      const newProfile = new this.profileRepository(profile);
-      await newProfile.save({ validateBeforeSave: true });
     } catch (error) {
       if (error.code === 11000) {
         throw new ConflictException('Username already exists');

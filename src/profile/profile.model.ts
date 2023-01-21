@@ -11,6 +11,8 @@ export class Profile {
     required: true,
   })
   email: string;
+  @Prop()
+  city: string;
   @Prop({ ref: 'User', type: Types.ObjectId })
   user: string;
 }

@@ -2,7 +2,7 @@ import { Body, Controller, Logger, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.model';
-import { AddToProfileDto } from './dto/create-profile.dto';
+import { CreateProfileDto } from './dto/create-profile.dto';
 import { Profile } from './profile.model';
 import { ProfileService } from './profile.service';
 
@@ -14,15 +14,15 @@ export class ProfileController {
   constructor(private profileService: ProfileService) {}
 
   @Post()
-  addToProfile(
-    @Body() addToProfileDto: AddToProfileDto,
+  createProfile(
+    @Body() createProfileDto: CreateProfileDto,
     @GetUser() user: User,
   ): Promise<Profile> {
     this.logger.verbose(
       `User "${user.username}" creating a new Profile. Data: ${JSON.stringify(
-        addToProfileDto,
+        createProfileDto,
       )}`,
     );
-    return this.profileService.addToProfile(addToProfileDto, user);
+    return this.profileService.createProfile(createProfileDto, user);
   }
 }
