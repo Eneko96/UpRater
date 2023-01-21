@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/auth/user.entity';
+import { User } from 'src/auth/user.model';
 import { CreateProfileDto } from './dto/create-profile.dto';
-import { Profile } from './profile.entity';
+import { Profile } from './profile.model';
 import { ProfileRepository } from './profile.repository';
 
 @Injectable()
@@ -12,6 +12,6 @@ export class ProfileService {
     createProfileDto: CreateProfileDto,
     user: User,
   ): Promise<Profile> {
-    return this.profileEntityRepository.insert(createProfileDto, user);
+    return this.profileEntityRepository.createProfile(createProfileDto, user);
   }
 }

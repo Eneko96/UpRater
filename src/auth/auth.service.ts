@@ -13,11 +13,15 @@ import { JwtPayload } from './jwt-payload.interface';
 // import { Profile } from 'src/profile/profile.entity';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { Profile, ProfileDocument } from 'src/profile/profile.model';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name) private usersRepository: Model<UserDocument>,
+    @InjectModel(User.name)
+    private usersRepository: Model<UserDocument>,
+    @InjectModel(Profile.name)
+    private profileRepository: Model<ProfileDocument>,
     // @InjectRepository(Profile)
     // private profilesRepository: Repository<Profile>,
     private jwtService: JwtService,

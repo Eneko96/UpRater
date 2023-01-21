@@ -1,5 +1,5 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { User } from 'src/auth/user.entity';
+import { User } from 'src/auth/user.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Rate, RateDocument } from './rate.model';
 import { Reactions, Topics } from './types';

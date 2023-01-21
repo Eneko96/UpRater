@@ -5,7 +5,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Model } from 'mongoose';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { JwtPayload } from './jwt-payload.interface';
-import { User } from './user.entity';
+import { User } from './user.model';
 import { UserDocument } from './user.model';
 
 @Injectable()

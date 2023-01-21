@@ -1,9 +1,9 @@
 import { Body, Controller, Logger, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/user.entity';
+import { User } from 'src/auth/user.model';
 import { CreateProfileDto } from './dto/create-profile.dto';
-import { Profile } from './profile.entity';
+import { Profile } from './profile.model';
 import { ProfileService } from './profile.service';
 
 @Controller('profile')

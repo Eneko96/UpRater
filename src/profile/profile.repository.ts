@@ -3,38 +3,43 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/auth/user.entity';
-import { Repository } from 'typeorm';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User } from 'src/auth/user.model';
+import { UserDocument } from 'src/auth/user.model';
 import { CreateProfileDto } from './dto/create-profile.dto';
-import { Profile } from './profile.entity';
+import { Profile, ProfileDocument } from './profile.model';
 
 @Injectable()
 export class ProfileRepository {
   constructor(
-    @InjectRepository(Profile)
-    private readonly profileEntityRepository: Repository<Profile>,
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    @InjectModel(Profile.name)
+    private readonly profileRepository: Model<ProfileDocument>,
+    @InjectModel(User.name)
+    private readonly usersRepository: Model<UserDocument>,
   ) {}
 
   private logger = new Logger('User Data Repository');
 
-  async insert(createProfile: CreateProfileDto, user: User): Promise<Profile> {
-    const { id } = user;
+  async createProfile(
+    createProfile: CreateProfileDto,
+    user: User,
+  ): Promise<Profile> {
     this.logger.verbose(
       `User "${
         user.username
       }" creating profile object. Filters: ${JSON.stringify(createProfile)}`,
     );
+    const { email, city } = createProfile;
 
-    // Create the profile and update the user with the profile
-    const userFound = await this.usersRepository.findOne({ where: { id } });
-    // console.log(userFound);
-    // userFound.profile = this.profileEntityRepository.create(createProfile);
-    // userFound.profile.user = user;
-    // console.log(await this.usersRepository.save(user));
+    const profile = new this.profileRepository({
+      email: email,
+      city: city,
+      user: user,
+    });
+    const newProfile = new this.profileRepository(profile);
+    await newProfile.save({ validateBeforeSave: true });
 
-    return userFound.profile;
+    return profile;
   }
 }

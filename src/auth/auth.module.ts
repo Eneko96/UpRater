@@ -7,7 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Profile } from 'src/profile/profile.entity';
+import { Profile, ProfileSchema } from 'src/profile/profile.model';
 
 @Module({
   imports: [
@@ -24,6 +24,7 @@ import { Profile } from 'src/profile/profile.entity';
       }),
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: Profile.name, schema: ProfileSchema }]),
     // TypeOrmModule.forFeature([Profile]),
   ],
   providers: [AuthService, JwtStrategy],

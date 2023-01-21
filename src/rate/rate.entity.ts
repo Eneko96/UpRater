@@ -1,4 +1,4 @@
-import { User } from '../auth/user.entity';
+import { User } from '../auth/user.model';
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Topics, Reactions } from './types';
 import { Exclude } from 'class-transformer';

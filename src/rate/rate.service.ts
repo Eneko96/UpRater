@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { User } from 'src/auth/user.entity';
+import { User } from 'src/auth/user.model';
 import { Rate } from './rate.model';
 import { RateRepository } from './rate.repository';
 
