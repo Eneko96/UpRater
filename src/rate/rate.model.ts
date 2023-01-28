@@ -8,15 +8,17 @@ export class Rate {
   @Prop()
   value: number;
   @Prop({ ref: 'User', type: Types.ObjectId })
-  user: string;
+  user_from: Types.ObjectId;
+  @Prop({ ref: 'User', type: Types.ObjectId })
+  user_to: Types.ObjectId;
   @Prop()
   created_at: Date;
   @Prop()
   anon: boolean;
   @Prop([String])
-  reactions: [string];
+  reactions: string[];
   @Prop([String])
-  topics: [string];
+  topics: string[];
   @Prop()
   how_close: number;
   @Prop()

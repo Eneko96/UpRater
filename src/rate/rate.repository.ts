@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Rate, RateDocument } from './rate.model';
 import { Reactions, Topics } from './types';
 import { Model } from 'mongoose';
+import { CreateRateDto } from './dto/create-rate.dto';
 
 @Injectable()
 export class RateRepository {
@@ -16,9 +17,11 @@ export class RateRepository {
 
   // Not working yet [TODO]
   async findById(id: string): Promise<Rate> {
-    const found = await this.ratesRepository.findOne({
-      where: { id },
-    });
+    const found = await this.ratesRepository
+      .findOne({
+        where: { id },
+      })
+      .exec();
     if (!found) {
       throw new NotFoundException(`Rate with ID "${id}" not found`);
     }
@@ -26,20 +29,19 @@ export class RateRepository {
   }
 
   async find(args?): Promise<Rate[]> {
-    return this.ratesRepository.find({ ...args });
+    return await this.ratesRepository.find({ ...args });
   }
 
-  async save(rate: Rate, user: User): Promise<Rate> {
+  async save(rate: CreateRateDto, user: User): Promise<Rate> {
     const { topics, reactions, ...rest } = rate;
     const createRate = this.ratesRepository.create({
       ...rest,
       topics: topics.map((topic) => Topics[topic]),
       reactions: reactions.map((reaction) => Reactions[reaction]),
-      user: user,
+      user_id: user._id,
     });
     const newRate = new this.ratesRepository(createRate);
-    const result = await newRate.save();
-    //const savedRate = await this.ratesRepository.save(createRate);
+    const result = newRate.save({ validateBeforeSave: true });
     this.logger.verbose(
       `User "${user.username}" created a new rate. Data: ${JSON.stringify(
         result,
