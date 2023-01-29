@@ -5,39 +5,25 @@ export type RateDocument = Rate & Document;
 
 @Schema()
 export class Rate {
+  _id: Types.ObjectId;
   @Prop()
   value: number;
   @Prop({ ref: 'User', type: Types.ObjectId })
-  user: string;
+  user_from: Types.ObjectId;
+  @Prop({ ref: 'User', type: Types.ObjectId })
+  user_to: Types.ObjectId;
   @Prop()
   created_at: Date;
   @Prop()
   anon: boolean;
-  @Prop([String])
-  reactions: [string];
-  @Prop([String])
-  topics: [string];
-  @Prop()
-  how_close: number;
   @Prop()
   comment: string;
+  @Prop()
+  reactions_count: number;
+  @Prop()
+  comments_count: number;
+  // @Prop()
+  // how_close: number;
 }
 
 export const RateSchema = SchemaFactory.createForClass(Rate);
-
-/* 
-  // POST example
-  {
-    "value": 5,
-    "created_at": "2020-10-29T12:00:00.000Z",
-    "anon": false,
-    "reactions": [
-      "happy"
-    ],
-    "topics": [
-      "politics"
-    ],
-    "how_close": 5,
-    "comment": "This is a comment"
-  }
- */

@@ -1,16 +1,16 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsOptional } from 'class-validator';
 import { Topics } from '../types';
 
-export class CreateRateDto {
-  @IsNotEmpty()
+export class UpdateRateDto {
+  @IsOptional()
   readonly comment: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   readonly topics: Topics[];
 
-  @IsNotEmpty()
+  @IsOptional()
   readonly created_at: Date;
 
-  @IsNotEmpty()
+  @IsOptional()
   readonly anon: boolean;
 }

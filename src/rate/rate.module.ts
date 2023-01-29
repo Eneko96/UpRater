@@ -9,5 +9,6 @@ import { RateService } from './rate.service';
   imports: [MongooseModule.forFeature([{ name: 'Rate', schema: RateSchema }])],
   providers: [RateService, RateRepository],
   controllers: [RateController],
+  exports: [RateRepository, RateService],
 })
 export class RateModule {}
