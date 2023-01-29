@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+commit prefix
+
+# kind=$(git branch | grep "*" | awk -F '/' '{print $1}')
+
+# exec < /dev/tty
+
+# read -p 'Before creating the commit, what kind?
+
+# [MAJOR=2]
+# [MINOR=1]
+# [PATCH=0]
+# [PREMAJOR=3]
+# [PREMINOR=4]
+# [PREPATCH=5]
+# [NIL=6]
+# ' yn
+
+# case $yn in
+#     [0]* ) echo "Patch" | npm version patch;;
+#     [1]* ) echo "Minor" | npm version minor;;
+#     [2]* ) echo "Major" | npm version major;;
+#     [3]* ) echo "Prepatch" | npm version prepatch;;
+#     [4]* ) echo "Preminor" | npm version preminor;;
+#     [5]* ) echo "Premajor" | npm version premajor;;
+#     [6]* ) echo "No version will be upgraded";;
+#     * ) echo "Please answer a valid answer [0,1,2,3,4,5].";;
+# esac
