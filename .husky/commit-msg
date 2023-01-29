@@ -1,12 +1,66 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+echo "Running commit-msg hook"
+commit="$(cat $1)"
+echo $commit
+branch=$(git rev-parse --abbrev-ref HEAD)
+kind=$(echo $branch| cut -d '/' -f1)
+echo $kind
 
-commit prefix
-
-# kind=$(git branch | grep "*" | awk -F '/' '{print $1}')
+case $branch in
+    "feature"*)
+        echo "Feature branch"
+        finalCommit="feat: $commit"
+        echo $finalCommit > $1
+        echo "Commit message updated"
+        echo $1
+        ;;
+    "bugfix"*)
+        echo "Bugfix branch"
+        ;;
+    "hotfix"*)
+        echo "Hotfix branch"
+        ;;
+    "release"*)
+        echo "Release branch"
+        ;;
+    "support"*)
+        echo "Support branch"
+        ;;
+    "chore"*)
+        echo "Chore branch"
+        ;;
+    "docs"*)
+        echo "Docs branch"
+        ;;
+    "test"*)
+        echo "Test branch"
+        ;;
+    "refactor"*)
+        echo "Refactor branch"
+        ;;
+    "style"*)
+        echo "Style branch"
+        ;;
+    "ci"*)
+        echo "CI branch"
+        ;;
+    "perf"*)
+        echo "Perf branch"
+        ;;
+    "revert"*)
+        echo "Revert branch"
+        ;;
+    "wip"*)
+        echo "WIP branch"
+        ;;
+    *)
+        echo "Invalid branch name"
+        exit 1
+        ;;
+esac
+exit 125
 
 # exec < /dev/tty
 
