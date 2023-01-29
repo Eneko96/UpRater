@@ -1,86 +1,53 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "Running commit-msg hook"
+echo -e "\033[32mRunning commit-msg hook"
 commit="$(cat $1)"
-echo $commit
 branch=$(git rev-parse --abbrev-ref HEAD)
 kind=$(echo $branch| cut -d '/' -f1)
 echo $kind
 
 case $branch in
     "feature"*)
-        echo "Feature branch"
-        finalCommit="feat: $commit"
-        printf "[FEAT] - $commit" > $1
+        echo -e "\033[32mFeature branch"
+        echo "[FEAT] - $commit" > $1
+        exit
         ;;
     "bugfix"*)
-        echo "Bugfix branch"
+        echo -e "\033[32mBugfix branch"
+        echo "[BUGFIX] - $commit" > $1
         ;;
     "hotfix"*)
-        echo "Hotfix branch"
+        echo -e "\033[32mHotfix branch"
+        echo "[HOTFIX] - $commit" > $1
         ;;
     "release"*)
-        echo "Release branch"
-        ;;
-    "support"*)
-        echo "Support branch"
-        ;;
-    "chore"*)
-        echo "Chore branch"
+        echo -e "\033[32mRelease branch"
+        echo "[RELEASE] - $commit" > $1
         ;;
     "docs"*)
-        echo "Docs branch"
+        echo -e "\033[32mDocs branch"
+        echo "[DOCS] - $commit" > $1
         ;;
     "test"*)
-        echo "Test branch"
+        echo -e "\033[32mTest branch"
+        echo "[TEST] - $commit" > $1
         ;;
     "refactor"*)
-        echo "Refactor branch"
+        echo -e "\033[32mRefactor branch"
+        echo "[REFACTOR] - $commit" > $1
         ;;
     "style"*)
-        echo "Style branch"
-        ;;
-    "ci"*)
-        echo "CI branch"
-        ;;
-    "perf"*)
-        echo "Perf branch"
-        ;;
-    "revert"*)
-        echo "Revert branch"
+        echo -e "\033[32mStyle branch"
+        echo "[CI] - $commit" > $1
         ;;
     "wip"*)
-        echo "WIP branch"
+        echo -e "\033[32mWIP branch"
+        echo "[WIP] - $commit" > $1
         ;;
     *)
-        echo "Invalid branch name"
+        echo -e "\033[31mInvalid branch name"
         exit 1
         ;;
 esac
-echo "Commit message: $commit"
-exit 125
-
-# exec < /dev/tty
-
-# read -p 'Before creating the commit, what kind?
-
-# [MAJOR=2]
-# [MINOR=1]
-# [PATCH=0]
-# [PREMAJOR=3]
-# [PREMINOR=4]
-# [PREPATCH=5]
-# [NIL=6]
-# ' yn
-
-# case $yn in
-#     [0]* ) echo "Patch" | npm version patch;;
-#     [1]* ) echo "Minor" | npm version minor;;
-#     [2]* ) echo "Major" | npm version major;;
-#     [3]* ) echo "Prepatch" | npm version prepatch;;
-#     [4]* ) echo "Preminor" | npm version preminor;;
-#     [5]* ) echo "Premajor" | npm version premajor;;
-#     [6]* ) echo "No version will be upgraded";;
-#     * ) echo "Please answer a valid answer [0,1,2,3,4,5].";;
-# esac
+exit
