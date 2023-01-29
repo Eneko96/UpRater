@@ -6,6 +6,8 @@ import { configValidationSchema } from './config.schema';
 import { RateModule } from './rate/rate.module';
 import { AppController } from './app.controller';
 import { ProfileModule } from './profile/profile.module';
+import { CommentModule } from './comment/comment.module';
+import { ReactionModule } from './reaction/reaction.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { ProfileModule } from './profile/profile.module';
     AuthModule,
     ProfileModule,
     RateModule,
+    CommentModule,
+    ReactionModule,
   ],
   controllers: [AppController],
 })

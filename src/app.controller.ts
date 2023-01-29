@@ -6,6 +6,9 @@ export class AppController {
   getHello(): any {
     return {
       rates: '/rate',
+      rate: '/rate/:id',
+      profile: '/profile',
+      comment: '/comment',
     };
   }
 }
