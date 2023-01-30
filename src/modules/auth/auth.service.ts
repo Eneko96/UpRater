@@ -13,7 +13,7 @@ import { JwtPayload } from './jwt-payload.interface';
 // import { Profile } from 'src/profile/profile.entity';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Profile, ProfileDocument } from 'src/profile/profile.model';
+import { Profile, ProfileDocument } from 'src/modules/profile/profile.model';
 
 @Injectable()
 export class AuthService {

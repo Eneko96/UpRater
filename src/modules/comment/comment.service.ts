@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ObjectId, Types } from 'mongoose';
-import { User } from 'src/auth/user.model';
-import { RateRepository } from 'src/rate/rate.repository';
+import { User } from 'src/modules/auth/user.model';
+import { RateRepository } from 'src/modules/rate/rate.repository';
 import { Comment } from './comment.model';
 import { CommentRepository } from './comment.repository';
 import { CreateRateDto } from './dto/create-comment.dto';

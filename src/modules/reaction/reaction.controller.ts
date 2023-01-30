@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ObjectId } from 'mongoose';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/user.model';
+import { GetUser } from 'src/modules/auth/get-user.decorator';
+import { User } from 'src/modules/auth/user.model';
 import { CreateReactionDto } from './dto/create-reaction.dto';
 import { Reaction } from './reaction.model';
 import { ReactionService } from './reaction.service';

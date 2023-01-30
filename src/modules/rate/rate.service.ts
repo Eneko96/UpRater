@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
-import { User } from 'src/auth/user.model';
+import { User } from 'src/modules/auth/user.model';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-user.dto';
 import { Rate } from './rate.model';

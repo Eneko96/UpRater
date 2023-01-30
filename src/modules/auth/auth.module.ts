@@ -7,7 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Profile, ProfileSchema } from 'src/profile/profile.model';
+import { Profile, ProfileSchema } from 'src/modules/profile/profile.model';
 
 @Module({
   imports: [

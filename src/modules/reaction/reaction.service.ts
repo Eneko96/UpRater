@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
-import { User } from 'src/auth/user.model';
-import { RateRepository } from 'src/rate/rate.repository';
+import { User } from 'src/modules/auth/user.model';
+import { RateRepository } from 'src/modules/rate/rate.repository';
 import { CreateReactionDto } from './dto/create-reaction.dto';
 import { Reaction } from './reaction.model';
 import { ReactionRepository } from './reaction.repository';

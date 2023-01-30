@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ObjectId } from 'mongoose';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/user.model';
+import { GetUser } from 'src/modules/auth/get-user.decorator';
+import { User } from 'src/modules/auth/user.model';
 import { Comment } from './comment.model';
 import { CommentService } from './comment.service';
 import { CreateRateDto } from './dto/create-comment.dto';

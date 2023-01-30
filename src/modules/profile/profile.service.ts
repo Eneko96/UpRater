@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/auth/user.model';
+import { User } from 'src/modules/auth/user.model';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { Profile } from './profile.model';
 import { ProfileRepository } from './profile.repository';
