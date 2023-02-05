@@ -45,6 +45,10 @@ case $branch in
         echo -e "\033[32mWIP branch"
         echo "[WIP] - $commit" > $1
         ;;
+    "main"* | "master"*)
+        echo -e "\033[32mMain branch"
+        echo "[MAIN] - $commit" > $1
+        ;;
     *)
         echo -e "\033[31mInvalid branch name"
         exit 1
