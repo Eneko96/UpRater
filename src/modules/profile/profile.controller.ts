@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Logger, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/modules/auth/get-user.decorator';
 import { User } from 'src/modules/auth/user.model';
@@ -19,7 +19,7 @@ export class ProfileController {
     @GetUser() user: User,
   ): Promise<Profile> {
     this.logger.verbose(
-      `User "${user.username}" creating a new Profile. Data: ${JSON.stringify(
+      `User "${user.email}" creating a new Profile. Data: ${JSON.stringify(
         createProfileDto,
       )}`,
     );

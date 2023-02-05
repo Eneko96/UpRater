@@ -26,16 +26,17 @@ export class ProfileRepository {
     user: User,
   ): Promise<Profile> {
     this.logger.verbose(
-      `User "${
-        user.username
-      }" creating profile object. Filters: ${JSON.stringify(createProfile)}`,
+      `User "${user.email}" creating profile object. Filters: ${JSON.stringify(
+        createProfile,
+      )}`,
     );
-    const { email, city } = createProfile;
+    const { username, city, age } = createProfile;
 
     const profile = new this.profileRepository({
-      email: email,
+      userId: user._id,
+      username: username,
       city: city,
-      user: user,
+      age: age,
     });
     const newProfile = new this.profileRepository(profile);
     await newProfile.save({ validateBeforeSave: true });
