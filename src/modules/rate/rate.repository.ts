@@ -44,7 +44,7 @@ export class RateRepository {
     });
     const result = createRate.save({ validateBeforeSave: true });
     this.logger.verbose(
-      `User "${user.username}" created a new rate. Data: ${JSON.stringify(
+      `User "${user.email}" created a new rate. Data: ${JSON.stringify(
         result,
       )}`,
     );

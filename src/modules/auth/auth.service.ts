@@ -31,7 +31,7 @@ export class AuthService {
     authCredentialsDto: AuthCredentialsDto,
     // profileCredentialsDto: CreateProfileDto,
   ): Promise<void> {
-    const { username, password } = authCredentialsDto;
+    const { email, password } = authCredentialsDto;
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -39,7 +39,7 @@ export class AuthService {
     //   email: profileCredentialsDto.email,
     // });
     const user = new this.usersRepository({
-      username,
+      email,
       password: hashedPassword,
       // profile: profile,
     });
@@ -49,7 +49,7 @@ export class AuthService {
       await newUser.save({ validateBeforeSave: true });
     } catch (error) {
       if (error.code === 11000) {
-        throw new ConflictException('Username already exists');
+        throw new ConflictException('Email already exists');
       } else {
         throw new InternalServerErrorException();
       }
@@ -59,11 +59,11 @@ export class AuthService {
   async signIn(
     authCredentialsDto: AuthCredentialsDto,
   ): Promise<{ accessToken: string }> {
-    const { username, password } = authCredentialsDto;
-    const user = await this.usersRepository.findOne({ where: { username } });
+    const { email, password } = authCredentialsDto;
+    const user = await this.usersRepository.findOne({ where: { email } });
     // compare isn't working,
     if (user && (await bcrypt.compare(password, user.password))) {
-      const payload: JwtPayload = { username };
+      const payload: JwtPayload = { email };
       const accessToken = await this.jwtService.sign(payload);
       return { accessToken };
     } else {

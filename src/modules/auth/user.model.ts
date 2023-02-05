@@ -6,8 +6,13 @@ export type UserDocument = User & Document;
 @Schema()
 export class User {
   _id: ObjectId;
-  @Prop({ unique: true })
-  username: string;
+
+  @Prop({
+    match:
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    required: true,
+  })
+  email: string;
   @Prop()
   password: string;
   // @Prop({ ref: 'Rate', type: Types.ObjectId })
