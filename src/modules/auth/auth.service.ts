@@ -39,14 +39,13 @@ export class AuthService {
     //   email: profileCredentialsDto.email,
     // });
     const user = new this.usersRepository({
-      email,
+      email: email,
       password: hashedPassword,
       // profile: profile,
     });
 
     try {
-      const newUser = new this.usersRepository(user);
-      await newUser.save({ validateBeforeSave: true });
+      await user.save({ validateBeforeSave: true });
     } catch (error) {
       if (error.code === 11000) {
         throw new ConflictException('Email already exists');
