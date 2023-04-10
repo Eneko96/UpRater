@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { ProfileModule } from './../profile/profile.module';
 import { CommentModule } from './../comment/comment.module';
 import { ReactionModule } from './../reaction/reaction.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ReactionModule } from './../reaction/reaction.module';
     RateModule,
     CommentModule,
     ReactionModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
 })
