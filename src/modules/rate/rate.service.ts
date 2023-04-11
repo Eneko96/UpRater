@@ -1,10 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
 import { User } from 'src/modules/auth/user.model';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-user.dto';
 import { Rate } from './rate.model';
 import { RateRepository } from './rate.repository';
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class RateService {
@@ -19,6 +20,23 @@ export class RateService {
 
   async createRate(rate: CreateRateDto, user: User): Promise<Rate> {
     this.logger.log('Creating a new rate');
+    const lastRate = await this.ratesRepository.find(
+      {
+        where: {
+          user_id: user._id,
+          $lte: { created_at: Date.now() - DAY_IN_MS },
+        },
+      },
+      [
+        { action: 'sort', args: { created_at: -1 } },
+        { action: 'limit', args: 15 },
+      ],
+    );
+    console.log(lastRate);
+    if (lastRate.length >= 15)
+      throw new ForbiddenException(
+        'Too many rates, you can only rate 15 times a day, and you have already rated 15 times today',
+      );
     return this.ratesRepository.save(rate, user);
   }
 
