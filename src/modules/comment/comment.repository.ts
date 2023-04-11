@@ -29,9 +29,14 @@ export class CommentRepository {
     return this.commentsRepository.create(newComment);
   }
 
-  async find(args): Promise<Comment[]> {
-    this.logger.log('Getting all comments');
+  async find(args?: any): Promise<Comment[]> {
+    this.logger.log('Getting comments with', args);
     return this.commentsRepository.find({ ...args });
+  }
+
+  async findAll(): Promise<Comment[]> {
+    this.logger.log('Getting all comments');
+    return this.commentsRepository.find();
   }
 
   async delete(user: User, comment_id: ObjectId): Promise<Comment> {
@@ -40,5 +45,39 @@ export class CommentRepository {
       user_id: user._id,
       _id: comment_id,
     });
+  }
+
+  async findOneAndUpdate(
+    comment_id: ObjectId,
+    comment: Partial<Comment>,
+  ): Promise<Comment> {
+    this.logger.log('Updating comment');
+    return this.commentsRepository.findOneAndUpdate(
+      {
+        _id: comment_id,
+      },
+      {
+        ...comment,
+      },
+      { new: true },
+    );
+  }
+
+  async updateOne(
+    _id: ObjectId,
+    comment: Partial<Comment> | Comment,
+  ): Promise<Comment> {
+    this.logger.log('Updating comment');
+    return this.commentsRepository.updateOne(
+      {
+        _id,
+      },
+      {
+        ...comment,
+      },
+      {
+        new: true,
+      },
+    ) as unknown as Comment;
   }
 }

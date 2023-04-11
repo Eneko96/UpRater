@@ -19,6 +19,9 @@ export class Comment extends Document {
 
   @Prop({ required: false })
   reactions: Types.ObjectId[];
+
+  @Prop({ required: false })
+  sentiment: string;
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment);
