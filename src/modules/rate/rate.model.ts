@@ -12,7 +12,7 @@ export class Rate {
   user_from: Types.ObjectId;
   @Prop({ ref: 'User', type: Types.ObjectId })
   user_to: Types.ObjectId;
-  @Prop()
+  @Prop({ required: false })
   created_at: Date;
   @Prop()
   anon: boolean;

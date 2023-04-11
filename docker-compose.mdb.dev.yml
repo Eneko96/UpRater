@@ -17,9 +17,7 @@ services:
     command:
       - sh
       - -c
-      - |
-        yarn install
-        yarn start:dev
+      - yarn start:dev
     environment:
       DOCKER: 'true'
       WAIT_HOSTS: mongo1:27017

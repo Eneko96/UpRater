@@ -7,6 +7,7 @@ import { Model, ObjectId } from 'mongoose';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-user.dto';
 import { UPDATE_STRATEGY_OPTIONS } from 'src/lib/updateStrategy';
+import { pipe } from 'src/lib/pipe';
 
 @Injectable()
 export class RateRepository {
@@ -28,9 +29,15 @@ export class RateRepository {
     }
     return found;
   }
+  async find(
+    args?,
+    pipeline?: { action: string; args: any | any[] }[],
+  ): Promise<Rate[]> {
+    let query = this.ratesRepository.find({ ...args });
+    if (pipeline && pipeline.length)
+      query = pipe<typeof query>(query, pipeline);
 
-  async find(args?): Promise<Rate[]> {
-    return await this.ratesRepository.find({ ...args });
+    return query.exec();
   }
 
   async save(rate: CreateRateDto, user: User): Promise<Rate> {
@@ -41,6 +48,7 @@ export class RateRepository {
       user_id: user._id,
       comments_count: 0,
       reactions_count: 0,
+      created_at: new Date(),
     });
     const result = createRate.save({ validateBeforeSave: true });
     this.logger.verbose(
