@@ -1,0 +1,77 @@
+version: '3'
+services:
+  node:
+    container_name: node
+    restart: always
+    build:
+      context: .
+      dockerfile: ./dev.Dockerfile
+    ports:
+      - '3000:3000'
+    links:
+      - mongo1
+    depends_on:
+      - mongo1
+    networks:
+      - webnet
+    command:
+      - sh
+      - -c
+      - |
+        yarn install
+        yarn start:dev
+    environment:
+      DOCKER: 'true'
+      WAIT_HOSTS: mongo1:27017
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+  mongo1:
+    container_name: mongo1
+    image: mongo:4.4
+    volumes:
+      - ~/mongors/data1:/data/db
+      - ./rs-init.sh:/scripts/rs-init.sh
+    networks:
+      - webnet
+    ports:
+      - 27021:27017
+    links:
+      - mongo2
+      - mongo3
+    restart: always
+    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'dbrs']
+  mongo2:
+    container_name: mongo2
+    image: mongo:4.4
+    volumes:
+      - ~/mongors/data2:/data/db
+    networks:
+      - webnet
+    ports:
+      - 27022:27017
+    restart: always
+    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'dbrs']
+  mongo3:
+    container_name: mongo3
+    image: mongo:4.4
+    volumes:
+      - ~/mongors/data3:/data/db
+    networks:
+      - webnet
+    ports:
+      - 27023:27017
+    restart: always
+    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'dbrs']
+  rabbit:
+    container_name: rabbit
+    image: rabbitmq:3
+    restart: always
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - webnet
+networks:
+  webnet:
+    driver: bridge
