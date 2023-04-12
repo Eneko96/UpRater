@@ -33,7 +33,7 @@ export class RateService {
         { action: 'limit', args: 15 },
       ],
     );
-    console.log(lastRate);
+
     if (lastRate.length >= 15)
       throw new ForbiddenException(
         'Too many rates, you can only rate 15 times a day, and you have already rated 15 times today',

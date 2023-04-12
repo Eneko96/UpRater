@@ -1,4 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ObjectId } from 'mongoose';
 import { model } from 'src/lib/sentimentModel';
@@ -15,6 +16,7 @@ export class CommentService {
   constructor(
     private commentRepository: CommentRepository,
     private rateRepository: RateRepository,
+    @Inject('NOTIFICATIONS_SERVICE') private readonly client: ClientProxy,
   ) {}
 
   private logger = new Logger('CommentService');
@@ -30,8 +32,9 @@ export class CommentService {
   ): Promise<Comment> {
     this.logger.log('Creating comment');
     try {
-      const Comment = this.commentRepository.save(user, comment, rate_id);
+      const Comment = await this.commentRepository.save(user, comment, rate_id);
       this.rateRepository.incrementCommentCount(rate_id);
+      this.client.emit('comment_created', Comment);
       return Comment;
     } catch (error) {
       this.logger.error(error);
