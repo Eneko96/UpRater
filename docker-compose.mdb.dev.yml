@@ -1,29 +1,45 @@
-version: '3'
+version: "3"
 services:
   node:
     container_name: node
     restart: always
     build:
-      context: .
-      dockerfile: ./dev.Dockerfile
+      context: ./main_server
+      dockerfile: dev.Dockerfile
     ports:
-      - '3000:3000'
+      - "3000:3000"
     links:
       - mongo1
     depends_on:
       - mongo1
     networks:
       - webnet
-    command:
-      - sh
-      - -c
-      - yarn start:dev
     environment:
-      DOCKER: 'true'
+      DOCKER: "true"
       WAIT_HOSTS: mongo1:27017
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./main_server:/app
+      # - app_volume:/usr/src/app/node_modules
+  node_rabbit:
+    container_name: node_rabbit
+    restart: always
+    build:
+      context: ./node_rabbit
+      dockerfile: dev.Dockerfile
+    ports:
+      - "4000:4000"
+    links:
+      - rabbit
+    depends_on:
+      - rabbit
+    networks:
+      - webnet
+    environment:
+      DOCKER: "true"
+      WAIT_HOSTS: rabbit:5672
+    volumes:
+      - ./node_rabbit:/app
+      # - rabbit_volume:/usr/src/app/node_modules
   mongo1:
     container_name: mongo1
     image: mongo:4.4
@@ -38,7 +54,7 @@ services:
       - mongo2
       - mongo3
     restart: always
-    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'dbrs']
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
   mongo2:
     container_name: mongo2
     image: mongo:4.4
@@ -49,7 +65,7 @@ services:
     ports:
       - 27022:27017
     restart: always
-    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'dbrs']
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
   mongo3:
     container_name: mongo3
     image: mongo:4.4
@@ -60,8 +76,16 @@ services:
     ports:
       - 27023:27017
     restart: always
-    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'dbrs']
-
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
+  rabbit:
+    container_name: rabbit
+    image: rabbitmq:3
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - webnet
 networks:
   webnet:
     driver: bridge

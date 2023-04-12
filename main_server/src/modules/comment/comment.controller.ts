@@ -7,6 +7,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 import { AuthGuard } from '@nestjs/passport';
 import { ObjectId } from 'mongoose';
 import { GetUser } from 'src/modules/auth/get-user.decorator';

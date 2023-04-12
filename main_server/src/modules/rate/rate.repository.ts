@@ -29,6 +29,7 @@ export class RateRepository {
     }
     return found;
   }
+
   async find(
     args?,
     pipeline?: { action: string; args: any | any[] }[],

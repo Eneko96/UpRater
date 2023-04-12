@@ -1,9 +1,9 @@
-version: '3'
+version: "3"
 services:
   node:
     build: .
     ports:
-      - '3000:3000'
+      - "3000:3000"
     depends_on:
       - mongo1
     links:
@@ -26,7 +26,7 @@ services:
       - mongo2
       - mongo3
     restart: always
-    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'dbrs']
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
   mongo2:
     container_name: mongo2
     image: mongo:4.4
@@ -37,7 +37,7 @@ services:
     ports:
       - 27022:27017
     restart: always
-    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'dbrs']
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
   mongo3:
     container_name: mongo3
     image: mongo:4.4
@@ -48,7 +48,7 @@ services:
     ports:
       - 27023:27017
     restart: always
-    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'dbrs']
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
 
 networks:
   webnet:
