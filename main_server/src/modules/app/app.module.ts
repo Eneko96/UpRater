@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from './../auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from '../../config.schema';
-import { RateModule } from './../rate/rate.module';
+import { RateModule } from '../rate/rate.module';
 import { AppController } from './app.controller';
-import { ProfileModule } from './../profile/profile.module';
-import { CommentModule } from './../comment/comment.module';
-import { ReactionModule } from './../reaction/reaction.module';
+import { ProfileModule } from '../profile/profile.module';
+import { CommentModule } from '../comment/comment.module';
+import { ReactionModule } from '../reaction/reaction.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
