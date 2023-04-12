@@ -1,10 +1,12 @@
 FROM node:16-alpine
 
-WORKDIR /usr/src/rabbit-broker
+WORKDIR /app
 
-COPY package.json yarn.lock ./
-COPY . .
+COPY package*.json yarn.lock ./
+
 RUN yarn install --silent
+
+COPY . .
 
 EXPOSE 4000
 

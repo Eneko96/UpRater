@@ -24,4 +24,4 @@ var config = {
 };
 rs.initiate(config, { force: true });
 rs.status();
-EOF%       
+EOF

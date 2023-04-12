@@ -5,7 +5,7 @@ services:
     restart: always
     build:
       context: ./main_server
-      dockerfile: ./dev.Dockerfile
+      dockerfile: dev.Dockerfile
     ports:
       - "3000:3000"
     links:
@@ -14,22 +14,18 @@ services:
       - mongo1
     networks:
       - webnet
-    command:
-      - sh
-      - -c
-      - yarn start:dev
     environment:
       DOCKER: "true"
       WAIT_HOSTS: mongo1:27017
     volumes:
-      - app_volume:/usr/src/app
-      - app_volume:/usr/src/app/node_modules
-  node-rabbit:
-    container_name: node-rabbit
+      - ./main_server:/app
+      # - app_volume:/usr/src/app/node_modules
+  node_rabbit:
+    container_name: node_rabbit
     restart: always
     build:
-      context: ./rabbit_broker
-      dockerfile: ./dev.Dockerfile
+      context: ./node_rabbit
+      dockerfile: dev.Dockerfile
     ports:
       - "4000:4000"
     links:
@@ -38,16 +34,12 @@ services:
       - rabbit
     networks:
       - webnet
-    command:
-      - sh
-      - -c
-      - yarn start:dev
     environment:
       DOCKER: "true"
       WAIT_HOSTS: rabbit:5672
     volumes:
-      - rabbit_volume:/usr/src/rabbit-broker
-      - rabbit_volume:/usr/src/rabbit-broker/node_modules
+      - ./node_rabbit:/app
+      # - rabbit_volume:/usr/src/app/node_modules
   mongo1:
     container_name: mongo1
     image: mongo:4.4
@@ -97,8 +89,3 @@ services:
 networks:
   webnet:
     driver: bridge
-volumes:
-  app_volume:
-    driver: local
-  rabbit_volume:
-    driver: local

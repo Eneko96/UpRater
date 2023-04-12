@@ -31,12 +31,17 @@ $ yarn run test:cov
 ```
 
 ## Docker Instance Postgres
-  
-  ```bash
-  # build compose for production (mongo)
-  $ docker-compose build && ./dbstart-prod.sh
 
-  # docker compose for development (mongo)
-  $ docker-compose -f docker-compose.mdb.dev.yml build && ./dbstart.sh
-  ```
-  
+```bash
+# build compose for production (mongo)
+$ docker-compose build && ./dbstart-prod.sh
+
+# docker compose for development (mongo)
+$ docker-compose -f docker-compose.mdb.dev.yml build && ./dbstart.sh
+```
+
+## Enabling RabbitMQ Dashboard
+
+```bash
+docker exec -it rabbit rabbitmq-plugins enable rabbitmq_management
+```
