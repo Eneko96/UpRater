@@ -15,9 +15,13 @@ In case you want to run the project without Docker, you will need to install Mon
 ```bash
 # install dependencies without docker
 $ cd main_server
+
 $ yarn install
+
 $ cd ..
+
 $ cd node_rabbit
+
 $ yarn install
 ```
 
@@ -50,6 +54,14 @@ $ yarn run test:cov
 ## Docker Instance
 
 ```bash
+
+# automatically start docker compose (weather windows or mac)
+# configure rabbit dashboard
+# open 4 terminals
+# show docker containers running
+$ chmod +x run.dev.sh
+$ ./run.dev.sh
+
 # build compose for production (mongo)
 $ docker-compose build && ./dbstart-prod.sh
 
