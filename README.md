@@ -67,6 +67,9 @@ $ docker-compose build && ./dbstart-prod.sh
 
 # docker compose for development (mongo)
 $ docker-compose -f docker-compose.mdb.dev.yml build && ./dbstart.sh
+
+# to run a log in docker (-f if want to tail it)
+$ docker logs -f {{container_name}}
 ```
 
 ## Enabling RabbitMQ Dashboard (port 15672)
