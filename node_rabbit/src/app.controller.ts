@@ -7,7 +7,7 @@ import {
 } from '@nestjs/microservices';
 import { AppService } from './app.service';
 import { Comment as IComment } from './comment/comment.model';
-import { CommentRepository } from './comment/comment.repository';
+import { CommentService } from './comment/comment.service';
 import { model } from './lib/sentimentModel';
 const cohere = require('cohere-ai'); // eslint-disable-line
 cohere.init(
@@ -19,7 +19,7 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     @Inject('NOTIFICATIONS_SERVICE') private readonly client: ClientProxy,
-    private readonly commentRepository: CommentRepository,
+    private readonly commentService: CommentService,
   ) {}
 
   private logger = new Logger('AppController');
@@ -35,7 +35,7 @@ export class AppController {
         model: 'large',
         examples: model.examples,
       });
-      await this.commentRepository.updateOne(Comment._id, {
+      await this.commentService.updateComment(Comment._id, {
         sentiment: response.body.classifications[0].prediction,
       });
       this.logger.log(
