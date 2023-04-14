@@ -1,14 +1,25 @@
 #!/bin/bash
 source scripts/print_color.sh
-source scripts/loader.sh
 
-# Check if Docker is running
-if ! docker info &>/dev/null; then
+function loader() {
+  local pid=$!
+  local delay=0.5
+  local spinstr='|/-\'
+  while [ "$(docker ps >/dev/null 2>&1; echo $?)" -ne 0 ]; do
+    local temp=${spinstr#?}
+    printf " [%c] %s " "$spinstr" "$1"
+    local spinstr=$temp${spinstr%"$temp"}
+    sleep $delay
+    printf "\r"
+  done
+  printf "    \r"
+}
+
+if ! docker ps >/dev/null 2>&1; then
   # If Docker is not running, start it
   print_color yellow "Docker is not running, starting Docker..."
   osascript -e 'tell application "Docker" to activate'
   loader "Waiting for Docker to start..."
-  until docker info &>/dev/null; do sleep 1; done
   print_color green "Docker is now running!"
 fi
 
@@ -19,10 +30,16 @@ print_color green "Docker app is now open"
 print_color gray "Running dev docker server with hot reloading"
 
 # Build and run the docker image
-docker-compose -f docker-compose.mdb.dev.yml build && ./dbstart.sh
 
-# enable rabbitmq management plugin
-docker exec -it rabbit rabbitmq-plugins enable rabbitmq_management
+if docker ps -a | grep -q "node"; then
+  print_color yellow "The node container is already running."
+else 
+  docker-compose -f docker-compose.mdb.dev.yml build && ./dbstart.sh
+
+  # enable rabbitmq management plugin
+  docker exec -it rabbit rabbitmq-plugins enable rabbitmq_management
+  docker exec -it rabbit add_exchange name=comment_exchange type=direct durable=true
+fi
 
 # Run Docker loggers in the background (doesn't work)
 # osascript -e 'tell application "Warp" to do script "docker logs -f container1" in tab 1 of window 1' &
