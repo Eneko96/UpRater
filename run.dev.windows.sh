@@ -1,5 +1,29 @@
 #!/bin/bash
+source scripts/print_color.sh
 echo "Running dev docker server with hot reloading"
+
+function loader() {
+  local pid=$!
+  local delay=0.5
+  local spinstr='|/-\'
+  while [ "$(docker ps >/dev/null 2>&1; echo $?)" -ne 0 ]; do
+    local temp=${spinstr#?}
+    printf " [%c] %s " "$spinstr" "$1"
+    local spinstr=$temp${spinstr%"$temp"}
+    sleep $delay
+    printf "\r"
+  done
+  printf "    \r"
+}
+
+if ! docker ps >/dev/null 2>&1; then
+  # If Docker is not running, start it
+  print_color yellow "Docker is not running, starting Docker..."
+  osascript -e 'tell application "Docker" to activate'
+  loader "Waiting for Docker to start..."
+  print_color green "Docker is now running!"
+fi
+
 
 # Build and run the docker image
 docker-compose -f docker-compose.mdb.dev.yml build && ./dbstart.sh
