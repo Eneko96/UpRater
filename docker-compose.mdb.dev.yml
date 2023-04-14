@@ -79,7 +79,12 @@ services:
     entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
   rabbit:
     container_name: rabbit
-    image: rabbitmq:3
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: mypassword
+    volumes:
+      - ./rbmq-conf/definitions.json:/etc/rabbitmq/definitions.json
     restart: always
     ports:
       - "5672:5672"
