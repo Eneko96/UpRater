@@ -38,7 +38,6 @@ else
 
   # enable rabbitmq management plugin
   docker exec -it rabbit rabbitmq-plugins enable rabbitmq_management
-  docker exec -it rabbit add_exchange name=comment_exchange type=direct durable=true
 fi
 
 # Run Docker loggers in the background (doesn't work)

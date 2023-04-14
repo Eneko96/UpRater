@@ -16,7 +16,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         name: 'NOTIFICATIONS_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://rabbit:5672'],
+          urls: ['amqp://user:mypassword@rabbit:5672'],
           queue: 'comment',
           queueOptions: {
             durable: true,

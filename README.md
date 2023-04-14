@@ -77,3 +77,11 @@ $ docker logs -f {{container_name}}
 ```bash
 docker exec -it rabbit rabbitmq-plugins enable rabbitmq_management
 ```
+
+## Creating a rabbit password for the instance
+
+```python
+
+python3 -c 'import hashlib;print(hashlib.sha256("mypassword".encode("utf-8")).hexdigest())'
+
+```
