@@ -1,7 +1,7 @@
 import { Controller, Logger } from '@nestjs/common';
 import { Ctx, MessagePattern, Payload } from '@nestjs/microservices';
-import { Comment as IComment } from './comment.model';
-import { CommentService } from './comment.service';
+import { Rate as IRate } from './rate.model';
+import { RateService } from './rate.service';
 import { model } from 'src/lib/sentimentModel';
 const cohere = require('cohere-ai'); // eslint-disable-line
 cohere.init(
@@ -9,27 +9,28 @@ cohere.init(
 );
 
 @Controller()
-export class CommentController {
-  constructor(private readonly commentService: CommentService) {}
+export class RateController {
+  constructor(private rateService: RateService) {}
 
-  private logger = new Logger('CommentMessageController');
+  private logger = new Logger('RateMessageController');
 
-  @MessagePattern('comment_created')
+  @MessagePattern('rate_created')
   public async generateSentiment(
-    @Payload() Comment: IComment,
+    @Payload() Rate: IRate,
     @Ctx() _ctx: any, // eslint-disable-line
   ) {
+    this.logger.log('Handling rate sentiment');
     try {
       const response = await cohere.classify({
-        inputs: [Comment.content],
+        inputs: [Rate.comment],
         model: 'large',
         examples: model.examples,
       });
-      await this.commentService.updateComment(Comment._id, {
+      await this.rateService.updateOne(Rate.user_from, Rate._id, {
         sentiment: response.body.classifications[0].prediction,
       });
       this.logger.log(
-        `sentiment for ${Comment._id} generated with: ${response.body.classifications[0].prediction}`,
+        `sentiment for ${Rate._id} generated with: ${response.body.classifications[0].prediction}`,
       );
     } catch (error) {
       console.error(error);
