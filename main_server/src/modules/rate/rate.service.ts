@@ -5,7 +5,7 @@ import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-user.dto';
 import { Rate } from './rate.model';
 import { RateRepository } from './rate.repository';
-const DAY_IN_MS = 24 * 60 * 60 * 1000;
+const YESTERDAY = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
 @Injectable()
 export class RateService {
@@ -23,19 +23,18 @@ export class RateService {
 
   async createRate(rate: CreateRateDto, user: User): Promise<Rate> {
     this.logger.log('Creating a new rate');
-    const lastRate = await this.ratesRepository.find(
+    const lastRates = await this.ratesRepository.find(
       {
-        where: {
-          user_id: user._id,
-          $lte: { created_at: Date.now() - DAY_IN_MS },
-        },
+        user_id: user._id,
+        created_at: { $gte: YESTERDAY },
       },
       [
         { action: 'sort', args: { created_at: -1 } },
-        { action: 'limit', args: 10 },
+        { action: 'limit', args: 15 },
       ],
     );
-    if (lastRate.length >= 15)
+
+    if (lastRates.length >= 15)
       throw new ForbiddenException(
         'Too many rates, you can only rate 15 times a day, and you have already rated 15 times today',
       );

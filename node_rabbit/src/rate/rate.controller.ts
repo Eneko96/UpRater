@@ -1,5 +1,10 @@
 import { Controller, Logger } from '@nestjs/common';
-import { Ctx, MessagePattern, Payload } from '@nestjs/microservices';
+import {
+  Ctx,
+  MessagePattern,
+  Payload,
+  RmqContext,
+} from '@nestjs/microservices';
 import { Rate as IRate } from './rate.model';
 import { RateService } from './rate.service';
 import { model } from 'src/lib/sentimentModel';
@@ -8,7 +13,7 @@ cohere.init(
   process.env.COHERE_API_KEY || 'B3yFEFh14ZrzFoFDBMy6rEFKzBrSsP4qEPQXeSQN',
 );
 
-@Controller()
+@Controller('rate')
 export class RateController {
   constructor(private rateService: RateService) {}
 
@@ -17,7 +22,7 @@ export class RateController {
   @MessagePattern('rate_created')
   public async generateSentiment(
     @Payload() Rate: IRate,
-    @Ctx() _ctx: any, // eslint-disable-line
+    @Ctx() _ctx: RmqContext,
   ) {
     this.logger.log('Handling rate sentiment');
     try {

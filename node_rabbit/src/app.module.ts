@@ -15,7 +15,7 @@ import { RbmqModule } from './rbmq/rbmq.module';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
+      useFactory: async (_configService: ConfigService) => {
         const uri = `mongodb://mongo1:27017/uprater`;
         return {
           uri,
