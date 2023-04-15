@@ -74,4 +74,8 @@ export class CommentRepository {
       },
     ) as unknown as Comment;
   }
+
+  async count(args?: any): Promise<number> {
+    return this.commentsRepository.countDocuments({ ...args });
+  }
 }

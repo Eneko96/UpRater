@@ -22,6 +22,8 @@ export class Rate {
   reactions_count: number;
   @Prop()
   comments_count: number;
+  @Prop({ isFinite: true, min: 0, max: 1, default: 1 })
+  weight: number;
   // @Prop()
   // how_close: number;
 }

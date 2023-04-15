@@ -9,7 +9,7 @@ export class Comment extends Document {
   content: string;
 
   @Prop({ ref: 'Rate', type: Types.ObjectId })
-  rate_id: ObjectId;
+  rate_id: Types.ObjectId;
 
   @Prop({ ref: 'User', type: Types.ObjectId })
   user_id: Types.ObjectId;

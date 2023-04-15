@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ObjectId } from 'mongoose';
+import mongoose, { ObjectId } from 'mongoose';
 import { User } from 'src/modules/auth/user.model';
 import { RateRepository } from 'src/modules/rate/rate.repository';
 import { Comment } from './comment.model';
@@ -24,12 +24,17 @@ export class CommentService {
   async createComment(
     user: User,
     comment: CreateRateDto,
-    rate_id: ObjectId,
+    rate_id: string,
   ): Promise<Comment> {
     this.logger.log('Creating comment');
     try {
-      const Comment = await this.commentRepository.save(user, comment, rate_id);
-      this.rateRepository.incrementCommentCount(rate_id);
+      const rateObject = new mongoose.Types.ObjectId(rate_id);
+      const Comment = await this.commentRepository.save(
+        user,
+        comment,
+        rateObject,
+      );
+      this.rateRepository.incrementCommentCount(rateObject);
       this.client.emit('comment_created', Comment);
       return Comment;
     } catch (error) {

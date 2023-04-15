@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ObjectId } from 'mongoose';
+import { Schema, ObjectId, Types } from 'mongoose';
 import { CommentRepository } from './comment.repository';
 import { Comment } from './comment.model';
 
@@ -9,7 +9,9 @@ export class CommentService {
 
   private logger = new Logger('CommentService');
 
-  async getComments(rate_id: ObjectId): Promise<Comment[]> {
+  async getComments(
+    rate_id: ObjectId | Schema.Types.ObjectId | Types.ObjectId,
+  ): Promise<Comment[]> {
     this.logger.log('Getting all comments');
     return this.commentsRepository.find({ rate_id });
   }
@@ -36,8 +38,19 @@ export class CommentService {
   async updateComment(
     comment_id: ObjectId,
     comment: Partial<Comment>,
+    newObject: boolean,
   ): Promise<Comment> {
     this.logger.log('Updating comment');
+    if (newObject)
+      return this.commentsRepository.findOneAndUpdate(comment_id, comment);
     return this.commentsRepository.updateOne(comment_id, comment);
+  }
+
+  async countComments(
+    user_id: ObjectId | Schema.Types.ObjectId | Types.ObjectId,
+    rate_id: ObjectId | Schema.Types.ObjectId | Types.ObjectId,
+  ): Promise<number> {
+    this.logger.log('Counting comments');
+    return this.commentsRepository.count({ rate_id, user_id });
   }
 }

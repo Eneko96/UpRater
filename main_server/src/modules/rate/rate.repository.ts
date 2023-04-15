@@ -3,7 +3,7 @@ import { User } from 'src/modules/auth/user.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Rate, RateDocument } from './rate.model';
 import { Topics } from './types';
-import { Model, ObjectId } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-user.dto';
 import { UPDATE_STRATEGY_OPTIONS } from 'src/lib/updateStrategy';
@@ -81,7 +81,9 @@ export class RateRepository {
     });
   }
 
-  async incrementCommentCount(rate_id: ObjectId): Promise<Rate> {
+  async incrementCommentCount(
+    rate_id: ObjectId | Types.ObjectId,
+  ): Promise<Rate> {
     this.logger.log('incrementing comment count', rate_id);
     return this.ratesRepository.findOneAndUpdate(
       { _id: rate_id },

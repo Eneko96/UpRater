@@ -13,14 +13,14 @@ export class RateRepository {
   private logger = new Logger('RateRepository');
 
   async updateOne(
-    user_id: Types.ObjectId,
-    _id: Types.ObjectId,
+    user_id: Types.ObjectId | ObjectId,
+    _id: Types.ObjectId | ObjectId,
     comment: Partial<Rate> | Rate,
   ): Promise<Rate> {
     this.logger.log('Updating Rate');
     return this.ratesRepository.updateOne(
       {
-        _id,
+        id: _id,
         user_from: user_id,
       },
       {
@@ -30,5 +30,11 @@ export class RateRepository {
         new: true,
       },
     ) as unknown as Promise<Rate>;
+  }
+
+  async findOne(_id: Types.ObjectId | ObjectId): Promise<Rate | null> {
+    return this.ratesRepository.findOne({
+      _id,
+    });
   }
 }
