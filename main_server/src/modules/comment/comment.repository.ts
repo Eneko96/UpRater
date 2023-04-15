@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Comment, CommentDocument } from './comment.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { User } from 'src/modules/auth/user.model';
 import { CreateRateDto } from './dto/create-comment.dto';
 
@@ -17,7 +17,7 @@ export class CommentRepository {
   async save(
     user: User,
     comment: CreateRateDto,
-    rate_id: ObjectId,
+    rate_id: ObjectId | Types.ObjectId,
   ): Promise<Comment> {
     this.logger.log('Creating comment');
     const newComment = new this.commentsRepository({

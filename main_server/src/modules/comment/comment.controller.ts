@@ -30,7 +30,7 @@ export class CommentController {
   async createComment(
     @GetUser() user: User,
     @Body() comment: CreateRateDto,
-    @Body('rate_id') rate_id: ObjectId,
+    @Body('rate_id') rate_id: string,
   ): Promise<Comment> {
     return this.commentService.createComment(user, comment, rate_id);
   }

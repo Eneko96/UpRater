@@ -24,6 +24,8 @@ export class Rate {
   comments_count: number;
   @Prop()
   sentiment: string;
+  @Prop({ isFinite: true, min: 0, max: 1, default: 1 })
+  weight: number;
   // @Prop()
   // how_close: number;
 }
