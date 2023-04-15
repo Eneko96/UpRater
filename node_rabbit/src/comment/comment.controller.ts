@@ -8,11 +8,11 @@ cohere.init(
   process.env.COHERE_API_KEY || 'B3yFEFh14ZrzFoFDBMy6rEFKzBrSsP4qEPQXeSQN',
 );
 
-@Controller()
+@Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  private logger = new Logger('AppController');
+  private logger = new Logger('CommentMessageController');
 
   @MessagePattern('comment_created')
   public async generateSentiment(

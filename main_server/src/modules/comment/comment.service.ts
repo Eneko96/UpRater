@@ -1,15 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import { ObjectId } from 'mongoose';
-import { model } from 'src/lib/sentimentModel';
 import { User } from 'src/modules/auth/user.model';
 import { RateRepository } from 'src/modules/rate/rate.repository';
 import { Comment } from './comment.model';
 import { CommentRepository } from './comment.repository';
 import { CreateRateDto } from './dto/create-comment.dto';
-const cohere = require('cohere-ai'); // eslint-disable-line
-cohere.init(process.env.COHERE_API_KEY);
 
 @Injectable()
 export class CommentService {
@@ -52,34 +48,6 @@ export class CommentService {
     } catch (error) {
       this.logger.error(error);
       throw error;
-    }
-  }
-
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  async handleCommentSentiment() {
-    this.logger.log('Handling comment sentiment');
-    const comments = await this.commentRepository.findAll();
-    const commentContent = comments.filter(
-      (comment) => !Object.keys(comment).includes('sentiment'),
-    );
-
-    const commentContentArray = commentContent.map(
-      (comment) => comment.content,
-    );
-    try {
-      const response = await cohere.classify({
-        inputs: commentContentArray,
-        model: 'large',
-        examples: model.examples,
-      });
-      for (let i = 0; i < response.body.classifications.length; i++) {
-        await this.commentRepository.updateOne(commentContent[i]._id, {
-          sentiment: response.body.classifications[i].prediction,
-        });
-      }
-      this.logger.log(`Sentiment of ${comments.length} comments handled`);
-    } catch (error) {
-      this.logger.error(error);
     }
   }
 }

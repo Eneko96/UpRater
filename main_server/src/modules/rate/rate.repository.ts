@@ -82,7 +82,7 @@ export class RateRepository {
   }
 
   async incrementCommentCount(rate_id: ObjectId): Promise<Rate> {
-    console.log('incrementing comment count', rate_id);
+    this.logger.log('incrementing comment count', rate_id);
     return this.ratesRepository.findOneAndUpdate(
       { _id: rate_id },
       { $inc: { comments_count: 1 } },

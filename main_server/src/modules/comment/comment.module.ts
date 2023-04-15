@@ -17,7 +17,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         transport: Transport.RMQ,
         options: {
           urls: ['amqp://user:mypassword@rabbit:5672'],
-          queue: 'comment',
+          queue: 'cohere_mongo',
           queueOptions: {
             durable: true,
           },

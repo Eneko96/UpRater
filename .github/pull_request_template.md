@@ -6,8 +6,7 @@ Fixes # (issue)
 ## Changes Made
 List the changes you made in this branch:
 
-- [commit 1](link-to-commit-1)
-- [commit 2](link-to-commit-2)
+- Change in the file x
 - ...
 
 ## Screenshots

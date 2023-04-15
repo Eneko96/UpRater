@@ -61,7 +61,7 @@ export class CommentRepository {
     _id: ObjectId,
     comment: Partial<Comment> | Comment,
   ): Promise<Comment> {
-    this.logger.log('Updating comment');
+    this.logger.log('Updating Comment');
     return this.commentsRepository.updateOne(
       {
         _id,

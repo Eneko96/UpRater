@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CommentModule } from './comment/comment.module';
+import { RateModule } from './rate/rate.module';
 import { RbmqModule } from './rbmq/rbmq.module';
 
 @Module({
@@ -14,7 +15,7 @@ import { RbmqModule } from './rbmq/rbmq.module';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
+      useFactory: async (_configService: ConfigService) => {
         const uri = `mongodb://mongo1:27017/uprater`;
         return {
           uri,
@@ -25,6 +26,7 @@ import { RbmqModule } from './rbmq/rbmq.module';
     }),
     RbmqModule,
     CommentModule,
+    RateModule,
   ],
   controllers: [AppController],
   providers: [AppService],

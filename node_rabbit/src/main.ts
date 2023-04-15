@@ -5,7 +5,7 @@ import { RbmqService } from './rbmq/rbmq.service';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const rbmqService = app.get<RbmqService>(RbmqService);
-  app.connectMicroservice(rbmqService.getOptions('COMMENTS'));
+  app.connectMicroservice(rbmqService.getOptions('COHERE'));
   await app.startAllMicroservices();
   await app.listen(3000);
 }
