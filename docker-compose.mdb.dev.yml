@@ -19,7 +19,7 @@ services:
       WAIT_HOSTS: mongo1:27017
     volumes:
       - ./main_server:/app
-      # - app_volume:/usr/src/app/node_modules
+      - /app/node_modules
   node_rabbit:
     container_name: node_rabbit
     restart: always
@@ -39,7 +39,7 @@ services:
       WAIT_HOSTS: rabbit:5672
     volumes:
       - ./node_rabbit:/app
-      # - rabbit_volume:/usr/src/app/node_modules
+      - /app/node_modules
   mongo1:
     container_name: mongo1
     image: mongo:4.4
