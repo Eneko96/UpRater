@@ -1,6 +1,7 @@
 version: "3"
 services:
   ui:
+    container_name: ui
     build:
       context: ./web_app_uprater
       dockerfile: dev.Dockerfile
@@ -33,11 +34,11 @@ services:
     volumes:
       - ./main_server:/app
       - /app/node_modules
-  node_rabbit:
-    container_name: node_rabbit
+  cohere_ms:
+    container_name: cohere_ms
     restart: always
     build:
-      context: ./node_rabbit
+      context: ./cohere_ms
       dockerfile: dev.Dockerfile
     ports:
       - "4000:4000"
@@ -51,7 +52,7 @@ services:
       DOCKER: "true"
       WAIT_HOSTS: rabbit:5672
     volumes:
-      - ./node_rabbit:/app
+      - ./cohere_ms:/app
       - /app/node_modules
   mongo1:
     container_name: mongo1
