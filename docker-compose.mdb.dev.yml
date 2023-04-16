@@ -1,5 +1,18 @@
 version: "3"
 services:
+  ui:
+    build:
+      context: ./web_app_uprater
+      dockerfile: dev.Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./web_app_uprater:/app
+      - /app/node_modules
+    links:
+      - node
+    depends_on:
+      - node
   node:
     container_name: node
     restart: always
