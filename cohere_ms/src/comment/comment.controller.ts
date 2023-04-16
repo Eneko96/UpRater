@@ -73,13 +73,6 @@ export class CommentController {
 
       const weightFromRates = await this.rateService.findOne(Comment.rate_id);
 
-      console.log(
-        weightFromRates.weight,
-        commentsCount,
-        relativeWeight[Comment.sentiment],
-        commentsCount + 1,
-      );
-
       const weight =
         (weightFromRates.weight * commentsCount +
           relativeWeight[Comment.sentiment]) /

@@ -37,6 +37,7 @@ export class RateController {
       this.logger.log(
         `sentiment for ${Rate._id} generated with: ${response.body.classifications[0].prediction}`,
       );
+      _ctx.getChannelRef().ack(_ctx.getMessage());
     } catch (error) {
       console.error(error);
     }
