@@ -28,7 +28,7 @@ export class TransformInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       map((data: any) => {
-        if (data.toJSON) {
+        if (data?.toJSON) {
           return data.toJSON();
         }
         return data;

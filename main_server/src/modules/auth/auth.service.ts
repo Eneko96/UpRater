@@ -46,6 +46,7 @@ export class AuthService {
 
     try {
       await user.save({ validateBeforeSave: true });
+      return
     } catch (error) {
       if (error.code === 11000) {
         throw new ConflictException('Email already exists');
