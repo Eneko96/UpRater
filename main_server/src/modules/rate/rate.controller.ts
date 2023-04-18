@@ -6,9 +6,10 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/modules/auth/get-user.decorator';
 import { User } from 'src/modules/auth/user.model';
 import { Rate } from './rate.model';
@@ -16,9 +17,11 @@ import { RateService } from './rate.service';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { ObjectId } from 'mongoose';
 import { UpdateRateDto } from './dto/update-user.dto';
+import { AuthenticatedGuard } from '../auth/authenticated.guard';
+import { CsrfInterceptor } from '../auth/csrf.interceptor';
 
 @Controller('rate')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthenticatedGuard)
 export class RateController {
   constructor(private rateService: RateService) {}
 
@@ -28,10 +31,15 @@ export class RateController {
   }
 
   @Post()
+  @UseInterceptors(CsrfInterceptor)
   createRate(
-    @Body() rate: CreateRateDto,
-    @GetUser() user: User,
+    @Body()
+    rate: CreateRateDto,
+    @GetUser()
+    user: User,
+    @Req() req,
   ): Promise<Rate> {
+    console.log('user on controller', req.user._id);
     return this.rateService.createRate(rate, user);
   }
 
@@ -44,10 +52,14 @@ export class RateController {
   }
 
   @Put()
+  @UseInterceptors(CsrfInterceptor)
   async updateRate(
-    @GetUser() user: User,
-    @Body() rate: UpdateRateDto,
-    @Query('id') rate_id: ObjectId,
+    @Body()
+    rate: UpdateRateDto,
+    @GetUser()
+    user: User,
+    @Query('id')
+    rate_id: ObjectId,
   ): Promise<Rate> {
     return this.rateService.updateRate(user, rate_id, rate);
   }
