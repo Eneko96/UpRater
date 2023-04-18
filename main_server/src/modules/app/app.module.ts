@@ -9,6 +9,7 @@ import { ProfileModule } from '../profile/profile.module';
 import { CommentModule } from '../comment/comment.module';
 import { ReactionModule } from '../reaction/reaction.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         };
       },
     }),
+    UsersModule,
     AuthModule,
     ProfileModule,
     RateModule,

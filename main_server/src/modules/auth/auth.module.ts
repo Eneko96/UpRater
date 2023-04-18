@@ -1,34 +1,16 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { User, UserSchema } from './user.model';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt.strategy';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Profile, ProfileSchema } from 'src/modules/profile/profile.model';
+import { LocalStrategy } from './local.strategy';
+import { SessionSerializer } from './session.serializer';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
-    ConfigModule,
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'),
-        signOptions: {
-          expiresIn: 3600,
-        },
-      }),
-    }),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    MongooseModule.forFeature([{ name: Profile.name, schema: ProfileSchema }]),
-    // TypeOrmModule.forFeature([Profile]),
+    // ConfigModule,
+    PassportModule.register({ session: true }),
+    UsersModule,
   ],
-  providers: [AuthService, JwtStrategy],
-  controllers: [AuthController],
-  exports: [JwtStrategy, PassportModule],
+  providers: [AuthService, LocalStrategy, SessionSerializer],
 })
 export class AuthModule {}

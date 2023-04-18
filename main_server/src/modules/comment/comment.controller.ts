@@ -7,17 +7,16 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
-import { AuthGuard } from '@nestjs/passport';
 import { ObjectId } from 'mongoose';
 import { GetUser } from 'src/modules/auth/get-user.decorator';
 import { User } from 'src/modules/auth/user.model';
+import { AuthenticatedGuard } from '../auth/authenticated.guard';
 import { Comment } from './comment.model';
 import { CommentService } from './comment.service';
 import { CreateRateDto } from './dto/create-comment.dto';
 
 @Controller('comment')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthenticatedGuard)
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 

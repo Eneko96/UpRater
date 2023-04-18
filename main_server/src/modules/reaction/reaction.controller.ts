@@ -7,16 +7,16 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ObjectId } from 'mongoose';
 import { GetUser } from 'src/modules/auth/get-user.decorator';
 import { User } from 'src/modules/auth/user.model';
+import { AuthenticatedGuard } from '../auth/authenticated.guard';
 import { CreateReactionDto } from './dto/create-reaction.dto';
 import { Reaction } from './reaction.model';
 import { ReactionService } from './reaction.service';
 
 @Controller('reaction')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthenticatedGuard)
 export class CommentController {
   constructor(private readonly reactionService: ReactionService) {}
 

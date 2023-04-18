@@ -1,4 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req, Res, Session, Request } from '@nestjs/common';
+import { randomBytes } from 'crypto';
 
 @Controller('/')
 export class AppController {
@@ -10,5 +11,16 @@ export class AppController {
       profile: '/profile',
       comment: '/comment',
     };
+  }
+
+  @Get('/secoptions')
+  getSecOptions(
+    @Req() req: Request,
+    @Res() res: any,
+    @Session() session: Record<string, any>,
+  ): any {
+    const csrfToken = randomBytes(16).toString('hex');
+    session.csrfToken = csrfToken;
+    return res.json({ csrfToken });
   }
 }
