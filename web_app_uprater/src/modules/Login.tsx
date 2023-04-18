@@ -1,4 +1,6 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { useMutation } from "../hooks/useQuery"
 import { useAuth } from "../store/auth"
 import { Modal } from "./Modal/Modal"
 
@@ -11,6 +13,13 @@ export const Login = () => {
   const [method, setMethod] = useState(METHOD.LOGIN)
   const [showModal, setShowModal] = useState(false)
   const setToken = useAuth(state => state.setToken)
+  const navigate = useNavigate()
+  // const { mutate } = useMutation('http://localhost:3000/auth/signin', {
+  //   onSuccess: (data: any) => console.log(data)
+  // })
+  const handleSignin = (data: any) => {
+    console.log(data)
+  }
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const target = e.target as typeof e.target & {
@@ -22,7 +31,7 @@ export const Login = () => {
 
     if (method === METHOD.REGISTER) {
       console.log('register')
-      const res = await fetch('http://localhost:3000/auth/signup', {
+      const res = await fetch('http://localhost:3000/users/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -42,22 +51,22 @@ export const Login = () => {
 
     if (method === METHOD.LOGIN) {
       console.log('login')
-      const res = await fetch('http://localhost:3000/auth/signin', {
+      const res = await fetch('http://localhost:3000/users/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({
           email,
           password
         })
       })
-
-      const token: { accessToken: string } = await res.json()
-
-      if (token) {
-        console.log(token)
-        setToken(token.accessToken)
+      // check cookie
+      const status = await res.status
+      if (status === 201) {
+        console.log('login success')
+        navigate('/feed')
       }
     }
 
@@ -65,24 +74,14 @@ export const Login = () => {
 
   }
   return (
-    <Modal open>
-      {/* <!-- Modal toggle --> */}
-<button onClick={() => setShowModal(!showModal)} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-  Toggle modal
-</button>
 
-{/* <!-- Main modal --> */}
-<div id="authentication-modal" tabIndex={-1} aria-hidden="true" className={`fixed top-0 left-0 right-0 z-50 ${!showModal ? 'hidden' : ''} w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}>
+<div id="authentication-modal" tabIndex={-1} aria-hidden="true" className={`flex justify-center items-center fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}>
     <div className="relative w-full max-w-md max-h-full">
         {/* <!-- Modal content --> */}
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            <button onClick={() => setShowModal(false)} type="button" className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="authentication-modal">
-                <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                <span className="sr-only">Close modal</span>
-            </button>
             <div className="px-6 py-6 lg:px-8">
                 <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3>
-                <form className="space-y-6" action="#">
+                <form className="space-y-6" action="#" onSubmit={handleLogin}>
                     <div>
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
                         <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com" required />
@@ -94,7 +93,7 @@ export const Login = () => {
                     <div className="flex justify-between">
                         <div className="flex items-start">
                             <div className="flex items-center h-5">
-                                <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
+                                <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" />
                             </div>
                             <label htmlFor="remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
                         </div>
@@ -109,6 +108,5 @@ export const Login = () => {
         </div>
     </div>
 </div> 
-    </Modal>
   )
 }
