@@ -5,6 +5,7 @@ import { TransformInterceptor } from './transform.interceptor';
 import { Logger } from '@nestjs/common';
 import * as session from 'express-session';
 import * as passport from 'passport';
+const HOURS_4 = 4 * 60 * 60 * 1000;
 
 async function bootstrap() {
   const logger = new Logger();
@@ -16,7 +17,9 @@ async function bootstrap() {
       secret: 'mysecret',
       resave: false,
       saveUninitialized: false,
-      // expires: new Date(Date.now() + 60 * 60 * 1000),
+      cookie: {
+        maxAge: HOURS_4,
+      },
     }),
   );
   app.use(passport.initialize());
