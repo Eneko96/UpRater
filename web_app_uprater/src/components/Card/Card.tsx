@@ -1,4 +1,16 @@
-export const Card = () => {
+interface IRate {
+  comment: string;
+  value: number;
+  anon: boolean;
+  created_at: string;
+  _id: number;
+}
+
+const rtf = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
+const today = new Date();
+
+export const Card: React.FC<IRate> = ({ comment, value, created_at }) => {
+  const timeDiff = today.getTime() - new Date(created_at).getTime();
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="flex justify-end px-4 pt-4">
@@ -52,10 +64,10 @@ export const Card = () => {
           </ul>
         </div>
       </div>
-      <div className="flex flex-col items-center pb-10">
+      <div className="relative flex flex-col items-center pb-10">
         <img
           className="w-24 h-24 mb-3 rounded-full shadow-lg"
-          src="/docs/images/people/profile-picture-3.jpg"
+          src="https://picsum.photos/96"
           alt="Bonnie image"
         />
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
@@ -64,12 +76,19 @@ export const Card = () => {
         <span className="text-sm text-gray-500 dark:text-gray-400">
           Visual Designer
         </span>
+        <span className="text-sm text-gray-200 dark:text-gray-200">
+          {comment}
+        </span>
+        <h5 className="mt-5 mb-1 text-lg font-medium text-gray-900 dark:text-white">
+          Overall Rating
+        </h5>
+        <h5 className="text-xl text-gray-900 dark:text-white">{value}!</h5>
         <div className="flex mt-4 space-x-3 md:mt-6">
           <a
             href="#"
             className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            Add friend
+            Comment
           </a>
           <a
             href="#"
@@ -78,6 +97,9 @@ export const Card = () => {
             Message
           </a>
         </div>
+        <small className="absolute bottom-[6px] right-6">
+          {rtf.format(-Math.floor(timeDiff / (1000 * 60 * 60 * 24)), 'days')}
+        </small>
       </div>
     </div>
   );

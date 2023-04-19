@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Card } from './components/Card/Card';
 
 function App() {
   const [rates, setRates] = useState<any[]>([]);
@@ -26,23 +27,9 @@ function App() {
     getRates();
   }, []);
   return (
-    <div className="grid gap-10 place-content-center m-10">
+    <div className="grid gap-10 justify-items-center m-10">
       {rates.map((rate) => {
-        const timeDiff = today.getTime() - new Date(rate.created_at).getTime();
-        return (
-          <div key={rate.id} className="bg-slate-500 p-10 w-max rounded-md">
-            <h1>{rate.name}</h1>
-            <p>{rate.comment}</p>
-            <p>{rate.value}</p>
-            <p>Anon: {rate.anon.toString()}</p>
-            <small>
-              {rtf2.format(
-                -Math.floor(timeDiff / (1000 * 60 * 60 * 24)),
-                'days',
-              )}
-            </small>
-          </div>
-        );
+        return <Card key={rate._id} {...rate} />;
       })}
     </div>
   );

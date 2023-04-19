@@ -60,8 +60,12 @@ services:
     volumes:
       - ~/mongors/data1:/data/db
       - ./rs-init.sh:/scripts/rs-init.sh
+      - ./scripts/migrate.sh:/scripts/migrate.sh
+      - ./scripts/migrate_data.json:/scripts/migrate_data.json
     networks:
-      - webnet
+      webnet:
+        aliases:
+          - mongo1
     ports:
       - 27021:27017
     links:
@@ -75,7 +79,9 @@ services:
     volumes:
       - ~/mongors/data2:/data/db
     networks:
-      - webnet
+      webnet:
+        aliases:
+          - mongo2
     ports:
       - 27022:27017
     restart: always
@@ -86,7 +92,9 @@ services:
     volumes:
       - ~/mongors/data3:/data/db
     networks:
-      - webnet
+      webnet:
+        aliases:
+          - mongo3
     ports:
       - 27023:27017
     restart: always

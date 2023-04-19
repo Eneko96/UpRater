@@ -34,7 +34,7 @@ print_color gray "Running dev docker server with hot reloading"
 if docker ps -a | grep -q "node"; then
   print_color yellow "The node container is already running."
 else 
-  docker-compose -f docker-compose.mdb.dev.yml build && ./dbstart.sh
+  docker-compose -f docker-compose.mdb.dev.yml build && ./dbstart.sh $MIGRATE_DATA
 
   # enable rabbitmq management plugin
   docker exec -it rabbit rabbitmq-plugins enable rabbitmq_management
@@ -49,15 +49,17 @@ fi
 # Wait for the Docker loggers to finish running
 wait
 
-# Split the terminal into 3 panes
-osascript -e 'tell application "Warp" to activate' -e 'tell application "System Events" to keystroke "d" using {command down}' -e 'delay 0.5'
-osascript -e 'tell application "Warp" to activate' -e 'tell application "System Events" to keystroke "D" using {shift down, command down}' -e 'delay 0.5'
+if [ "$OPEN_PANES" = "true" ]; then
+  # Split the terminal into 3 panes
+  osascript -e 'tell application "Warp" to activate' -e 'tell application "System Events" to keystroke "d" using {command down}' -e 'delay 0.5'
+  osascript -e 'tell application "Warp" to activate' -e 'tell application "System Events" to keystroke "D" using {shift down, command down}' -e 'delay 0.5'
 
-# Navigate to the left pane
-osascript -e 'tell application "Warp" to activate' -e 'tell application "System Events" to key code 123 using {command down, option down}' -e 'delay 0.5'
+  # Navigate to the left pane
+  osascript -e 'tell application "Warp" to activate' -e 'tell application "System Events" to key code 123 using {command down, option down}' -e 'delay 0.5'
 
-# Open a new pane below the left pane
-osascript -e 'tell application "Warp" to activate' -e 'tell application "System Events" to keystroke "D" using {shift down, command down}' -e 'delay 0.5'
+  # Open a new pane below the left pane
+  osascript -e 'tell application "Warp" to activate' -e 'tell application "System Events" to keystroke "D" using {shift down, command down}' -e 'delay 0.5'
+fi
 
 docker ps --format "{{.Names}}\t{{.ID}}"
 
