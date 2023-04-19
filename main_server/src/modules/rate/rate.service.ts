@@ -18,21 +18,20 @@ export class RateService {
 
   async getRates(): Promise<Rate[]> {
     this.logger.log('Getting all rates');
-    return this.ratesRepository.find();
+    return this.ratesRepository.find({
+      populate: { user_to: ['username'] },
+    });
   }
 
   async createRate(rate: CreateRateDto, user: User): Promise<Rate> {
     this.logger.log('Creating a new rate');
-    const lastRates = await this.ratesRepository.find(
-      {
-        user_id: user._id,
-        created_at: { $gte: YESTERDAY },
-      },
-      [
+    const lastRates = await this.ratesRepository.find({
+      args: { user_id: user._id, created_at: { $gte: YESTERDAY } },
+      pipeline: [
         { action: 'sort', args: { created_at: -1 } },
         { action: 'limit', args: 15 },
       ],
-    );
+    });
 
     if (lastRates.length >= 15)
       throw new ForbiddenException(
@@ -45,7 +44,9 @@ export class RateService {
 
   async getMyRates(user: User): Promise<Rate[]> {
     this.logger.log('Getting all rates for user');
-    return this.ratesRepository.find({ where: { user_id: user._id } });
+    return this.ratesRepository.find({
+      args: { where: { user_id: user._id } },
+    });
   }
 
   async deleteRate(user: User, rate_id: string): Promise<Rate> {

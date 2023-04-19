@@ -5,6 +5,7 @@ export type ProfileDocument = Profile & Document;
 
 @Schema()
 export class Profile {
+  _id: Types.ObjectId;
   @Prop({ unique: true })
   username: string;
   @Prop()

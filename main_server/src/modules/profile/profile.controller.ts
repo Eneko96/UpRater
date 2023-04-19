@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, UseGuards } from '@nestjs/common';
 import { GetUser } from 'src/modules/auth/get-user.decorator';
 import { User } from 'src/modules/auth/user.model';
 import { AuthenticatedGuard } from '../auth/authenticated.guard';
@@ -24,5 +24,11 @@ export class ProfileController {
       )}`,
     );
     return this.profileService.createProfile(createProfileDto, user);
+  }
+
+  @Get()
+  getProfile(@GetUser() user: User): Promise<Profile> {
+    this.logger.verbose(`User "${user.email}" retrieving their Profile.`);
+    return this.profileService.getProfile(user);
   }
 }

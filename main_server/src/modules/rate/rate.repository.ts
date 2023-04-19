@@ -3,7 +3,7 @@ import { User } from 'src/modules/auth/user.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Rate, RateDocument } from './rate.model';
 import { Topics } from './types';
-import mongoose, { Model, ObjectId, Types } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-user.dto';
 import { UPDATE_STRATEGY_OPTIONS } from 'src/lib/updateStrategy';
@@ -30,13 +30,25 @@ export class RateRepository {
     return found;
   }
 
-  async find(
-    args?,
-    pipeline?: { action: string; args: any | any[] }[],
-  ): Promise<Rate[]> {
+  async find({
+    args,
+    pipeline,
+    populate,
+  }: {
+    populate?: Record<string, string[]>;
+    pipeline?: { action: string; args: any | any[] }[];
+    args?: any;
+  }): Promise<Rate[]> {
     let query = this.ratesRepository.find({ ...args });
     if (pipeline && pipeline.length)
       query = pipe<typeof query>(query, pipeline);
+
+    // populate user_to
+    if (populate) {
+      for (const [key, value] of Object.entries(populate)) {
+        query = query.populate(key, ...value);
+      }
+    }
 
     return query.exec();
   }
@@ -49,7 +61,7 @@ export class RateRepository {
       user_id: user._id,
       comments_count: 0,
       reactions_count: 0,
-      user_to: new mongoose.Types.ObjectId(rate.user_to),
+      user_to: rate.user_to,
       user_from: user._id,
       created_at: new Date().toISOString(),
     });
