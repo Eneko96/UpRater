@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef } from 'react';
 
 export const useCache = () => {
   const cache = useRef<Record<string, any>>(new Map());
@@ -7,10 +7,10 @@ export const useCache = () => {
 
   const set = (key: string, value: any) => {
     cache.current[key] = value;
-  }
+  };
 
   return { get, set };
-}
+};
 
 // example
 

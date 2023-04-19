@@ -21,9 +21,9 @@ import { UsersModule } from '../users/users.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const uri = `mongodb://${configService.get(
-          'DB_HOST',
-        )}:${configService.get('DB_PORT')}/${configService.get('DB_DATABASE')}`;
+        const uri =
+          configService.get('MONGO_URI') ||
+          'mongodb://mongo1:27017,mongo2:27017,mongo3:27017/your_database_name?replicaSet=dbrs';
         return {
           uri,
           useUnifiedTopology: true,
