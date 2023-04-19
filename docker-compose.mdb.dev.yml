@@ -61,7 +61,8 @@ services:
       - ~/mongors/data1:/data/db
       - ./rs-init.sh:/scripts/rs-init.sh
       - ./scripts/migrate.sh:/scripts/migrate.sh
-      - ./scripts/migrate_data.json:/scripts/migrate_data.json
+      - ./scripts/migrate_data_rates.json:/scripts/migrate_data_rates.json
+      - ./scripts/migrate_data_users.json:/scripts/migrate_data_users.json
     networks:
       webnet:
         aliases:

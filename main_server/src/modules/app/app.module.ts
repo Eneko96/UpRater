@@ -23,7 +23,7 @@ import { UsersModule } from '../users/users.module';
       useFactory: async (configService: ConfigService) => {
         const uri =
           configService.get('MONGO_URI') ||
-          'mongodb://mongo1:27017,mongo2:27017,mongo3:27017/your_database_name?replicaSet=dbrs';
+          'mongodb://mongo1:27017,mongo2:27017,mongo3:27017/uprater?replicaSet=dbrs';
         return {
           uri,
           useUnifiedTopology: true,

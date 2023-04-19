@@ -30,13 +30,25 @@ export class RateRepository {
     return found;
   }
 
-  async find(
-    args?,
-    pipeline?: { action: string; args: any | any[] }[],
-  ): Promise<Rate[]> {
+  async find({
+    args,
+    pipeline,
+    populate,
+  }: {
+    populate?: Record<string, string[]>;
+    pipeline?: { action: string; args: any | any[] }[];
+    args?: any;
+  }): Promise<Rate[]> {
     let query = this.ratesRepository.find({ ...args });
     if (pipeline && pipeline.length)
       query = pipe<typeof query>(query, pipeline);
+
+    // populate user_to
+    if (populate) {
+      for (const [key, value] of Object.entries(populate)) {
+        query = query.populate(key, ...value);
+      }
+    }
 
     return query.exec();
   }
@@ -49,7 +61,9 @@ export class RateRepository {
       user_id: user._id,
       comments_count: 0,
       reactions_count: 0,
-      created_at: new Date(),
+      user_to: rate.user_to,
+      user_from: user._id,
+      created_at: new Date().toISOString(),
     });
     const result = createRate.save({ validateBeforeSave: true });
     this.logger.verbose(

@@ -33,6 +33,7 @@ export class ProfileRepository {
     const { username, city, age } = createProfile;
 
     const profile = new this.profileRepository({
+      _id: user._id,
       userId: user._id,
       username: username,
       city: city,
@@ -41,6 +42,14 @@ export class ProfileRepository {
     const newProfile = new this.profileRepository(profile);
     await newProfile.save({ validateBeforeSave: true });
 
+    return profile;
+  }
+
+  async getProfile(user: User): Promise<Profile> {
+    this.logger.verbose(`User "${user.email}" retrieving their profile.`);
+    const profile = await this.profileRepository.findOne({
+      userId: user._id,
+    });
     return profile;
   }
 }

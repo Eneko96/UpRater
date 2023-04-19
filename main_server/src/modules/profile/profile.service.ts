@@ -14,4 +14,8 @@ export class ProfileService {
   ): Promise<Profile> {
     return this.profileEntityRepository.createProfile(createProfileDto, user);
   }
+
+  getProfile(user: User): Promise<Profile> {
+    return this.profileEntityRepository.getProfile(user);
+  }
 }
