@@ -18,7 +18,7 @@ export class CommentRepository {
       ...comment,
       user_id: user._id,
       rate_id,
-      created_at: new Date(),
+      created_at: new Date().toISOString(),
     });
     return this.commentsRepository.create(newComment);
   }

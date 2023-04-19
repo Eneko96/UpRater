@@ -24,7 +24,7 @@ export class ReactionRepository {
       ...reaction,
       user_id: user._id,
       parent_id,
-      created_at: new Date(),
+      created_at: new Date().toISOString(),
     });
     return this.reactionsRepository.create(newReaction);
   }

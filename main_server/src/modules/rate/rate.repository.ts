@@ -3,7 +3,7 @@ import { User } from 'src/modules/auth/user.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Rate, RateDocument } from './rate.model';
 import { Topics } from './types';
-import { Model, ObjectId, Types } from 'mongoose';
+import mongoose, { Model, ObjectId, Types } from 'mongoose';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-user.dto';
 import { UPDATE_STRATEGY_OPTIONS } from 'src/lib/updateStrategy';
@@ -49,7 +49,9 @@ export class RateRepository {
       user_id: user._id,
       comments_count: 0,
       reactions_count: 0,
-      created_at: new Date(),
+      user_to: new mongoose.Types.ObjectId(rate.user_to),
+      user_from: user._id,
+      created_at: new Date().toISOString(),
     });
     const result = createRate.save({ validateBeforeSave: true });
     this.logger.verbose(

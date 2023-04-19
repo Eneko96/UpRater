@@ -9,8 +9,8 @@ export class CreateRateDto {
   readonly topics: Topics[];
 
   @IsNotEmpty()
-  readonly created_at: Date;
+  readonly anon: boolean;
 
   @IsNotEmpty()
-  readonly anon: boolean;
+  readonly user_to: string;
 }
