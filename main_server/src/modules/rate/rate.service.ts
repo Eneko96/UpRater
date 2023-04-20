@@ -43,12 +43,6 @@ export class RateService {
   async getMyRates(user: User): Promise<Aggregate<Rate[] | Aggregate<number>>> {
     console.log('user', user);
     this.logger.log('Getting all rates for user');
-    const query = await this.ratesRepository.find({
-      args: {
-        user_to: new mongoose.Types.ObjectId(user._id as unknown as string),
-      },
-    });
-    console.log(query);
     const pipeline = [
       {
         $match: {
