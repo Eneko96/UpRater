@@ -63,6 +63,7 @@ services:
       - ./scripts/migrate.sh:/scripts/migrate.sh
       - ./scripts/migrate_data_rates.json:/scripts/migrate_data_rates.json
       - ./scripts/migrate_data_users.json:/scripts/migrate_data_users.json
+      - ./scripts/migrate_data_profiles.json:/scripts/migrate_data_profiles.json
     networks:
       webnet:
         aliases:

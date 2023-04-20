@@ -16,9 +16,12 @@ export class CommentService {
   ) {}
 
   private logger = new Logger('CommentService');
-  async getComments(rate_id: ObjectId): Promise<Comment[]> {
+  async getComments(rate_id: string): Promise<Comment[]> {
     this.logger.log(`Getting comments from ${rate_id}`);
-    return this.commentRepository.find({ rate_id: rate_id });
+    const rateId = new mongoose.Types.ObjectId(rate_id);
+    return this.commentRepository.find({
+      rate_id: rateId,
+    });
   }
 
   async createComment(

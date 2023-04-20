@@ -3,7 +3,14 @@ import { User } from 'src/modules/auth/user.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Rate, RateDocument } from './rate.model';
 import { Topics } from './types';
-import { Model, ObjectId, Types } from 'mongoose';
+import {
+  Aggregate,
+  AggregateOptions,
+  Model,
+  ObjectId,
+  PipelineStage,
+  Types,
+} from 'mongoose';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-user.dto';
 import { UPDATE_STRATEGY_OPTIONS } from 'src/lib/updateStrategy';
@@ -43,7 +50,6 @@ export class RateRepository {
     if (pipeline && pipeline.length)
       query = pipe<typeof query>(query, pipeline);
 
-    // populate user_to
     if (populate) {
       for (const [key, value] of Object.entries(populate)) {
         query = query.populate(key, ...value);
@@ -51,6 +57,14 @@ export class RateRepository {
     }
 
     return query.exec();
+  }
+
+  async aggregate({
+    options,
+  }: {
+    options: any;
+  }): Promise<Aggregate<Rate[] | Aggregate<number>>> {
+    return this.ratesRepository.aggregate(options);
   }
 
   async save(rate: CreateRateDto, user: User): Promise<Rate> {

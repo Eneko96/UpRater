@@ -1,12 +1,16 @@
 [
   {
-    "_id": "64406a66caa7623abab719e5",
+    "_id": {
+      "$oid": "64406a66caa7623abab719e5"
+    },
     "email": "imoreno.main@gmail.com",
     "password": "$2b$10$UvufS2irHQjpeAl0GIHV9.x60iU5US7777Gf8FilFbi.mtxxuKVnS",
     "__v": 0
   },
   {
-    "_id": "64406a6ccaa7623abab719e7",
+    "_id": {
+      "$oid": "64406a6ccaa7623abab719e7"
+    },
     "email": "imoreno@gmail.com",
     "password": "$2b$10$ZOYRwt8epen/R23ppRQWNeAs4TQqLJYwVzqhE4Ya1VtAud0a5JRg2",
     "__v": 0

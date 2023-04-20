@@ -1,5 +1,5 @@
 import { Injectable, Logger, ForbiddenException, Inject } from '@nestjs/common';
-import { ObjectId } from 'mongoose';
+import mongoose, { Aggregate, ObjectId } from 'mongoose';
 import { User } from 'src/modules/auth/user.model';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-user.dto';
@@ -18,9 +18,7 @@ export class RateService {
 
   async getRates(): Promise<Rate[]> {
     this.logger.log('Getting all rates');
-    return this.ratesRepository.find({
-      populate: { user_to: ['username'], user_from: ['username'] },
-    });
+    return this.ratesRepository.find({});
   }
 
   async createRate(rate: CreateRateDto, user: User): Promise<Rate> {
@@ -42,11 +40,39 @@ export class RateService {
     return Rate;
   }
 
-  async getMyRates(user: User): Promise<Rate[]> {
+  async getMyRates(user: User): Promise<Aggregate<Rate[] | Aggregate<number>>> {
     this.logger.log('Getting all rates for user');
-    return this.ratesRepository.find({
-      args: { where: { user_id: user._id } },
-      populate: { user_to: ['username'] },
+    console.log('user', user);
+    const userId = new mongoose.Types.ObjectId(user._id as unknown as string);
+    const pipeline = [
+      {
+        $match: {
+          user_to: userId,
+        },
+      },
+      {
+        $lookup: {
+          from: 'profiles',
+          localField: 'user_from',
+          foreignField: '_id',
+          as: 'user_from_profile',
+        },
+      },
+      {
+        $addFields: {
+          profile_from: '$user_from_profile.username',
+        },
+      },
+      {
+        $project: {
+          user_from_profile: 0,
+          user_from_id: 0,
+        },
+      },
+    ];
+
+    return this.ratesRepository.aggregate({
+      options: pipeline,
     });
   }
 
