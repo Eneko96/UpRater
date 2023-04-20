@@ -15,7 +15,7 @@ import { User } from 'src/modules/auth/user.model';
 import { Rate } from './rate.model';
 import { RateService } from './rate.service';
 import { CreateRateDto } from './dto/create-rate.dto';
-import { ObjectId } from 'mongoose';
+import { Aggregate, ObjectId } from 'mongoose';
 import { UpdateRateDto } from './dto/update-user.dto';
 import { AuthenticatedGuard } from '../auth/authenticated.guard';
 import { CsrfInterceptor } from '../auth/csrf.interceptor';
@@ -65,7 +65,9 @@ export class RateController {
   }
 
   @Get()
-  async getMyRates(@GetUser() user: User): Promise<Rate[]> {
+  async getMyRates(
+    @GetUser() user: User,
+  ): Promise<Aggregate<Rate[] | Aggregate<number>>> {
     return await this.rateService.getMyRates(user);
   }
 }

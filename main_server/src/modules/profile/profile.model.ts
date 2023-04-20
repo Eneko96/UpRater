@@ -18,8 +18,6 @@ export class Profile {
   linktree: string;
   @Prop({ default: 0 })
   c_rates: number;
-  @Prop({ type: Types.ObjectId, ref: 'User' })
-  userId: Types.ObjectId;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);
