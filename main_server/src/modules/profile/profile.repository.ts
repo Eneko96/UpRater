@@ -48,9 +48,7 @@ export class ProfileRepository {
 
   async getProfile(user: User): Promise<Profile> {
     this.logger.verbose(`User "${user.email}" retrieving their profile.`);
-    const profile = await this.profileRepository.findOne({
-      userId: user._id,
-    });
+    const profile = await this.profileRepository.findById(user._id);
     return profile;
   }
 

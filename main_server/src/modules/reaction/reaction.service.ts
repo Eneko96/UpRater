@@ -16,7 +16,7 @@ export class ReactionService {
   private logger = new Logger('ReactionService');
   async getReactions(rate_id: ObjectId): Promise<Reaction[]> {
     this.logger.log(`Getting reactions from ${rate_id}`);
-    return this.reactionRepository.find({ rate_id: rate_id });
+    return this.reactionRepository.find({ rate_id });
   }
 
   async createReaction(

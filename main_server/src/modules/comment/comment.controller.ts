@@ -23,7 +23,7 @@ export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Get()
-  async getComments(@Query('rate') rate_id: ObjectId): Promise<Comment[]> {
+  async getComments(@Query('rate') rate_id: string): Promise<Comment[]> {
     return this.commentService.getComments(rate_id);
   }
 
