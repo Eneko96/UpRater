@@ -1,8 +1,19 @@
-import { Body, Controller, Get, Logger, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Patch,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { GetUser } from 'src/modules/auth/get-user.decorator';
 import { User } from 'src/modules/auth/user.model';
 import { AuthenticatedGuard } from '../auth/authenticated.guard';
+import { CsrfInterceptor } from '../auth/csrf.interceptor';
 import { CreateProfileDto } from './dto/create-profile.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { Profile } from './profile.model';
 import { ProfileService } from './profile.service';
 
@@ -14,6 +25,7 @@ export class ProfileController {
   constructor(private profileService: ProfileService) {}
 
   @Post()
+  @UseInterceptors(CsrfInterceptor)
   createProfile(
     @Body() createProfileDto: CreateProfileDto,
     @GetUser() user: User,
@@ -30,5 +42,19 @@ export class ProfileController {
   getProfile(@GetUser() user: User): Promise<Profile> {
     this.logger.verbose(`User "${user.email}" retrieving their Profile.`);
     return this.profileService.getProfile(user);
+  }
+
+  @Patch()
+  @UseInterceptors(CsrfInterceptor)
+  updateProfile(
+    @Body() createProfileDto: UpdateProfileDto,
+    @GetUser() user: User,
+  ): Promise<Profile> {
+    this.logger.verbose(
+      `User "${user.email}" updating their Profile. Data: ${JSON.stringify(
+        createProfileDto,
+      )}`,
+    );
+    return this.profileService.updateProfile(createProfileDto, user);
   }
 }

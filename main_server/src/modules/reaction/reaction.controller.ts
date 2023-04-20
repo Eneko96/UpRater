@@ -6,11 +6,13 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
 import { GetUser } from 'src/modules/auth/get-user.decorator';
 import { User } from 'src/modules/auth/user.model';
 import { AuthenticatedGuard } from '../auth/authenticated.guard';
+import { CsrfInterceptor } from '../auth/csrf.interceptor';
 import { CreateReactionDto } from './dto/create-reaction.dto';
 import { Reaction } from './reaction.model';
 import { ReactionService } from './reaction.service';
@@ -28,6 +30,7 @@ export class CommentController {
   }
 
   @Post()
+  @UseInterceptors(CsrfInterceptor)
   async createReaction(
     @GetUser() user: User,
     @Body() reaction: CreateReactionDto,

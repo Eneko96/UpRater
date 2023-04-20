@@ -8,7 +8,7 @@ export class Rate {
   _id: Types.ObjectId;
   @Prop()
   value: number;
-  @Prop({ ref: 'User', type: Types.ObjectId })
+  @Prop({ ref: 'Profile', type: Types.ObjectId })
   user_from: Types.ObjectId;
   @Prop({ ref: 'Profile', type: Types.ObjectId })
   user_to: Types.ObjectId;

@@ -25,7 +25,7 @@ import { CsrfInterceptor } from '../auth/csrf.interceptor';
 export class RateController {
   constructor(private rateService: RateService) {}
 
-  @Get()
+  @Get('/all')
   async getRates(): Promise<Rate[]> {
     return await this.rateService.getRates();
   }
@@ -64,7 +64,7 @@ export class RateController {
     return this.rateService.updateRate(user, rate_id, rate);
   }
 
-  @Get('/my')
+  @Get()
   async getMyRates(@GetUser() user: User): Promise<Rate[]> {
     return await this.rateService.getMyRates(user);
   }

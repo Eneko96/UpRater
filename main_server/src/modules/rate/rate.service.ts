@@ -19,7 +19,7 @@ export class RateService {
   async getRates(): Promise<Rate[]> {
     this.logger.log('Getting all rates');
     return this.ratesRepository.find({
-      populate: { user_to: ['username'] },
+      populate: { user_to: ['username'], user_from: ['username'] },
     });
   }
 
@@ -46,6 +46,7 @@ export class RateService {
     this.logger.log('Getting all rates for user');
     return this.ratesRepository.find({
       args: { where: { user_id: user._id } },
+      populate: { user_to: ['username'] },
     });
   }
 
