@@ -20,7 +20,8 @@ export class CommentService {
     this.logger.log(`Getting comments from ${rate_id}`);
     const rateId = new mongoose.Types.ObjectId(rate_id);
     return this.commentRepository.find({
-      rate_id: rateId,
+      args: { rate_id: rateId },
+      populate: true,
     });
   }
 

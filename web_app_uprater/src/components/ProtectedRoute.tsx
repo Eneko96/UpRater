@@ -1,5 +1,4 @@
-import { Navigate, Outlet, RouteProps } from 'react-router-dom';
-import { useAuth } from '../store/auth';
+import { Navigate, Outlet } from 'react-router-dom';
 
 export const ProtectedRoute = (props: any) => {
   // const { token } = useAuth()
@@ -9,8 +8,6 @@ export const ProtectedRoute = (props: any) => {
   const cookieId = cookies
     .split(';')
     .find((cookie) => cookie.includes('connect.sid'));
-  console.log(cookieId);
-  console.log(cookies);
 
   return cookieId ? <Outlet /> : <Navigate to="/login" />;
 };
