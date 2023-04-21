@@ -60,7 +60,10 @@ $ yarn run test:cov
 # open 4 terminals
 # show docker containers running
 $ chmod +x run.dev.sh
+# arguments --migrate and/or --panes can be added on the script
 $ ./run.dev.sh
+# example with args
+$ ./run.dev.sh --migrate
 
 # build compose for production (mongo)
 $ docker-compose build && ./dbstart-prod.sh
@@ -75,6 +78,7 @@ $ docker logs -f {{container_name}}
 ## Enabling RabbitMQ Dashboard (port 15672)
 
 ```bash
+# it is not necessary anymore, unless you run it manually instead of with run.dev.sh
 docker exec -it rabbit rabbitmq-plugins enable rabbitmq_management
 ```
 
