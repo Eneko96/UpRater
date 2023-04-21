@@ -5,14 +5,11 @@ import { Card } from './components/Card/Card';
 function App() {
   const [rates, setRates] = useState<any[]>([]);
   const navigate = useNavigate();
-  const rtf2 = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
-  const today = new Date();
   const getRates = async () => {
     const res = await fetch('http://localhost:3000/rate', {
       credentials: 'include',
     });
     const status = await res.status;
-    console.log(res);
     if (status === 401 || status === 302 || status === 403) navigate('/login');
     const rates = await res.json();
     setRates(

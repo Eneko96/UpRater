@@ -37,9 +37,7 @@ export class RateController {
     rate: CreateRateDto,
     @GetUser()
     user: User,
-    @Req() req,
   ): Promise<Rate> {
-    console.log('user on controller', req.user._id);
     return this.rateService.createRate(rate, user);
   }
 

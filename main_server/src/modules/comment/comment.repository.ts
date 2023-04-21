@@ -29,9 +29,20 @@ export class CommentRepository {
     return this.commentsRepository.create(newComment);
   }
 
-  async find(args?: any): Promise<Comment[]> {
+  async find({
+    args,
+    populate,
+  }: {
+    args: any;
+    populate?: boolean;
+  }): Promise<Comment[]> {
     this.logger.log('Getting comments with', args);
-    return this.commentsRepository.find({ ...args });
+    let query: any = this.commentsRepository.find({ ...args });
+    if (populate) {
+      query = query.populate('user_id', 'username');
+    }
+
+    return query.exec();
   }
 
   async findAll(): Promise<Comment[]> {

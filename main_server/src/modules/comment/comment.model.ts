@@ -11,7 +11,7 @@ export class Comment extends Document {
   @Prop({ ref: 'Rate', type: Types.ObjectId })
   rate_id: ObjectId;
 
-  @Prop({ ref: 'User', type: Types.ObjectId })
+  @Prop({ ref: 'Profile', type: Types.ObjectId })
   user_id: Types.ObjectId;
 
   @Prop({ required: false })
