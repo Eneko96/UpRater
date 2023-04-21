@@ -15,8 +15,10 @@ import { RbmqModule } from './rbmq/rbmq.module';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (_configService: ConfigService) => {
-        const uri = `mongodb://mongo1:27017/uprater`;
+      useFactory: async (configService: ConfigService) => {
+        const uri =
+          configService.get('MONGO_URI') ||
+          'mongodb://mongo1:27017,mongo2:27017,mongo3:27017/uprater?replicaSet=dbrs';
         return {
           uri,
           useUnifiedTopology: true,
