@@ -4,12 +4,18 @@ interface IRate {
   anon: boolean;
   created_at: string;
   _id: number;
+  profile_from: string[];
 }
 
 const rtf = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
 const today = new Date();
 
-export const Card: React.FC<IRate> = ({ comment, value, created_at }) => {
+export const Card: React.FC<IRate> = ({
+  comment,
+  value,
+  created_at,
+  profile_from,
+}) => {
   const timeDiff = today.getTime() - new Date(created_at).getTime();
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -71,7 +77,7 @@ export const Card: React.FC<IRate> = ({ comment, value, created_at }) => {
           alt="Bonnie image"
         />
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-          Bonnie Green
+          {profile_from[0]}
         </h5>
         <span className="text-sm text-gray-500 dark:text-gray-400">
           Visual Designer

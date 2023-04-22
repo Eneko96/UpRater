@@ -1,13 +1,65 @@
-import { useNavigate } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import { useRootContext } from '../../contexts/RootContext';
+import { fetchProxy } from '../../lib/fetch';
 import { useAuth } from '../../store/auth';
-import { useTriggers } from '../../store/triggers';
 import { Modal } from '../Modal/Modal';
+import { Types } from '../../contexts/RootContext';
+interface IUser {
+  _id: string;
+  username: string;
+  city: string;
+  age: number;
+  c_rates: number;
+}
+
+enum Topics {
+  POLITICS = 'politics',
+  RELIGION = 'religion',
+  SPORTS = 'sports',
+  MOVIES = 'movies',
+  MUSIC = 'music',
+  TRAVEL = 'travel',
+  STREET = 'street',
+  LEISURE = 'leisure',
+  WORK = 'work',
+  SCHOOL = 'school',
+  FAMILY = 'family',
+  FRIENDS = 'friends',
+  LOVE = 'love',
+  HEALTH = 'health',
+}
+
+const debounce = (func: any, wait: number) => { // eslint-disable-line
+  let timeout: any; // eslint-disable-line
+  return function (...args: any) { // eslint-disable-line
+    const later = () => {
+      timeout = null;
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
+const getUsers = async (username: string) => {
+  const users = await fetchProxy<IUser | IUser[]>(
+    `http://localhost:3000/profile/${username}`,
+    {
+      method: 'GET',
+      credentials: 'include',
+    },
+  );
+  return users;
+};
 
 export const CreateRate = () => {
-  const navigate = useNavigate();
   const csrf = useAuth((state) => state.csrf);
-  const setTriggers = useTriggers((state) => state.setTriggers);
-  const triggers = useTriggers((state) => state.triggers);
+  const { setRateModal, rateModal, setNotification, notification } =
+    useRootContext();
+  const [users, setUsers] = useState<IUser[]>([]);
+  const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const ref = useRef<HTMLInputElement>(null);
 
   const handleCreation = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,8 +74,7 @@ export const CreateRate = () => {
     const value = target.value.value;
     const anon = target.anon.checked;
 
-    console.log({ csrf });
-    const res = await fetch('http://localhost:3000/rate', {
+    const { status } = await fetchProxy('http://localhost:3000/rate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,33 +87,112 @@ export const CreateRate = () => {
         value,
         anon,
         created_at: new Date(),
+        user_to: selectedUser?._id,
       }),
     });
-    const status = await res.status;
-    if (status === 401 || status === 302 || status === 403) navigate('/login');
-    else {
-      const rate = await res.json();
-      setTriggers({ ...triggers, createRate: false, notification: true });
+    if (status === 201) {
+      setRateModal(false);
+      setNotification({
+        show: true,
+        message: 'Rate created successfully',
+        type: Types.SUCCESS,
+      });
     }
+
+    if (status === 400) {
+      setNotification({
+        ...notification,
+        show: true,
+        message: 'Something went wrong',
+        type: Types.DANGER,
+      });
+    }
+    // setTriggers({ ...triggers, createRate: false, notification: true });
     // setRates([...rates, rate].sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()))
   };
 
+  const handleSearch = debounce(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { res: users } = await getUsers(e.target.value);
+      setShowDropdown(true);
+      if (Array.isArray(users)) setUsers(users);
+      else setUsers([users]);
+    },
+    400,
+  );
+
+  const handleSelectUser = (usr: IUser) => (e: any) => {
+    console.log(usr, e);
+    if (ref.current) ref.current.value = usr.username;
+    setSelectedUser(usr);
+    setShowDropdown(false);
+  };
+
   return (
-    <Modal
-      open={triggers.createRate}
-      onClose={() => setTriggers({ ...triggers, createRate: false })}
-    >
+    <Modal open={rateModal} onClose={() => setRateModal(false)}>
       <h3 className="font-bold text-xl text-end">Create a Rate</h3>
       <form
         onSubmit={handleCreation}
         className="grid gap-6 bg-zinc-900 p-10 rounded-md"
       >
-        <input
+        <div className="relative">
+          <input
+            ref={ref}
+            type="search"
+            placeholder="Search for a user"
+            className="bg-transparent border-red-50 border p-2 rounded-md w-80"
+            onChange={handleSearch}
+          />
+          <div
+            id="dropdown"
+            className={`z-10 ${
+              showDropdown ? '' : 'hidden'
+            } bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 absolute translate-y-2 transition-transform w-full`}
+          >
+            <ul
+              className="py-2 text-sm text-gray-700 dark:text-gray-200"
+              aria-labelledby="dropdownDefaultButton"
+            >
+              <li
+                key={'default-user'}
+                className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              >
+                <div className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200">
+                  Select a user
+                </div>
+              </li>
+              {users.map((user) => (
+                <li
+                  key={user._id}
+                  onClick={handleSelectUser(user)}
+                  className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  <div
+                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200"
+                    onClick={handleSelectUser(user)}
+                  >
+                    {user.username}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <select
           className="bg-transparent border-red-50 border p-2 rounded-md w-80"
-          type="text"
           name="topics"
           placeholder="Topics"
-        />
+        >
+          {Object.keys(Topics).map((topic) => (
+            <option
+              key={topic}
+              value={topic}
+              className="first-letter:uppercase"
+            >
+              {topic.toLowerCase()}
+            </option>
+          ))}
+        </select>
         <input
           className="bg-transparent border-red-50 border p-2 rounded-md w-80"
           type="text"
@@ -96,7 +226,7 @@ export const CreateRate = () => {
           <button
             type="button"
             className="flex-1"
-            onClick={() => setTriggers({ ...triggers, createRate: false })}
+            onClick={() => setRateModal(false)}
           >
             Cancel
           </button>

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useTriggers } from '../../store/triggers';
+import { useRootContext } from '../../contexts/RootContext';
 
 const colorType = {
   info: 'text-blue-800',
@@ -8,33 +8,33 @@ const colorType = {
   warning: 'text-yellow-800',
   dark: 'text-gray-800',
 };
-type Type = keyof typeof colorType;
 
-export const Notification: React.FC<{ type: Type; msg: string }> = ({
-  type,
-  msg,
-}) => {
-  const triggers = useTriggers((session) => session.triggers);
-  const setNotification = useTriggers((session) => session.setTriggers);
+export const Notification: React.FC = () => {
+  const { notification, setNotification } = useRootContext();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setNotification({ ...triggers, notification: false });
+      setNotification({
+        ...notification,
+        show: false,
+      });
     }, 5000);
     return () => clearTimeout(timer);
-  }, [triggers.notification]);
+  }, [notification.show]);
+
+  console.log(colorType[notification.type]);
 
   return (
     <div
-      className={`top-2 min-w-full p-4 mb-4 text-sm ${colorType[type]} ${
-        triggers.notification ? 'absolute' : 'hidden'
+      className={`top-2 min-w-full p-4 mb-4 text-sm ${
+        colorType[notification.type]
+      } ${
+        notification.show ? 'absolute' : 'hidden'
       } rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400`}
       role="alert"
     >
-      <span className="font-medium">
-        {type.slice(0, 1).toUpperCase() + type.slice(1)} alert!
-      </span>
-      {msg}
+      <span className="font-medium"></span>
+      {notification.message || 'Default message'}
     </div>
   );
 };
