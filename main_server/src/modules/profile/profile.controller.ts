@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Logger,
+  Param,
   Patch,
   Post,
   UseGuards,
@@ -56,5 +57,16 @@ export class ProfileController {
       )}`,
     );
     return this.profileService.updateProfile(createProfileDto, user);
+  }
+
+  @Get('/:username')
+  getProfileByUsername(
+    @GetUser() user: User,
+    @Param() { username }: { username: string },
+  ): Promise<Profile[]> {
+    this.logger.verbose(
+      `User "${user.email}" retrieving Profile for username "${username}".`,
+    );
+    return this.profileService.getProfileByUsername(username);
   }
 }

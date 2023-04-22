@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useRootContext } from '../../contexts/RootContext';
 import { useTriggers } from '../../store/triggers';
 const paths = [
   {
@@ -14,8 +15,7 @@ const paths = [
 
 export const NavBar = () => {
   const navigate = useNavigate();
-  const setTrigger = useTriggers((state) => state.setTriggers);
-  const trigger = useTriggers((state) => state.triggers);
+  const { setRateModal } = useRootContext();
 
   const handleLogout = async () => {
     const res = await fetch('http://localhost:3000/users/logout', {
@@ -78,7 +78,7 @@ export const NavBar = () => {
             ))}
             <li className="m-auto">
               <button
-                onClick={() => setTrigger({ ...trigger, createRate: true })}
+                onClick={() => setRateModal(true)}
                 className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 bg-transparent dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
                 Create

@@ -64,4 +64,10 @@ export class ProfileRepository {
     );
     return profile;
   }
+
+  async find(username: string): Promise<Profile[]> {
+    return this.profileRepository.find({
+      username: { $regex: new RegExp(username, 'i') },
+    });
+  }
 }
