@@ -1,6 +1,9 @@
 import { FormEventHandler, useState } from 'react';
 import { fetchProxy } from '../../lib/fetch';
-import { CommentsDialog } from '../../modules/CommentsDialog/CommentsDialog';
+import {
+  CommentsDialog,
+  IComment,
+} from '../../modules/CommentsDialog/CommentsDialog';
 
 type ProfileFrom = {
   username: string;
@@ -29,6 +32,7 @@ export const Card: React.FC<IRate> = ({
   user_from,
 }) => {
   const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState<IComment[]>([]);
   const timeDiff = today.getTime() - new Date(created_at).getTime();
 
   const handleAddComment: FormEventHandler<HTMLFormElement> = (e) => {
@@ -64,6 +68,17 @@ export const Card: React.FC<IRate> = ({
     console.log(res);
 
     form.reset();
+  };
+
+  const handleShowComments = async () => {
+    const commentsDB: IComment[] = await getComments();
+    setComments(commentsDB);
+    setShowComments(!showComments);
+  };
+
+  const getComments = async (): Promise<IComment[]> => {
+    const res = await fetchProxy<IComment[]>(`/comment?rate=${_id}`);
+    return res.res;
   };
 
   return (
@@ -141,7 +156,7 @@ export const Card: React.FC<IRate> = ({
           <h5 className="text-xl text-gray-900 dark:text-white">{value}!</h5>
           <div className="mt-4 space-x-3 md:mt-6 text-gray-500">
             {comments_count && (
-              <button onClick={() => setShowComments(true)}>
+              <button onClick={handleShowComments}>
                 View all {comments_count} comments
               </button>
             )}
@@ -158,7 +173,7 @@ export const Card: React.FC<IRate> = ({
           </small>
         </div>
       </div>
-      {showComments && <CommentsDialog comments={[]} />}
+      {showComments && <CommentsDialog comments={comments} />}
     </>
   );
 };
