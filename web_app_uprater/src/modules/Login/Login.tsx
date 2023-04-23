@@ -21,7 +21,6 @@ export const Login = () => {
     const password = target.password.value;
 
     if (method === METHOD.REGISTER) {
-      console.log('register');
       const res = await fetch('http://localhost:3000/users/signup', {
         method: 'POST',
         headers: {
@@ -41,7 +40,6 @@ export const Login = () => {
     }
 
     if (method === METHOD.LOGIN) {
-      console.log('login');
       const res = await fetch('http://localhost:3000/users/signin', {
         method: 'POST',
         headers: {
@@ -56,7 +54,6 @@ export const Login = () => {
       // check cookie
       const status = await res.status;
       if (status === 201) {
-        console.log('login success');
         const csrf = await fetch('http://localhost:3000/secoptions', {
           credentials: 'include',
         });
@@ -65,9 +62,8 @@ export const Login = () => {
         navigate('/feed');
       }
     }
-
-    console.log(email, password);
   };
+
   return (
     <div
       id="authentication-modal"

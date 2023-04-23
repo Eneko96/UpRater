@@ -1,8 +1,18 @@
-import { Controller, Get, Req, Res, Session, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Req,
+  Res,
+  Session,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { randomBytes } from 'crypto';
+import { AuthenticatedGuard } from '../auth/authenticated.guard';
 const MINUTES_10 = 600000;
 
 @Controller('/')
+@UseGuards(AuthenticatedGuard)
 export class AppController {
   @Get()
   getHello(): any {
@@ -22,11 +32,15 @@ export class AppController {
   ): any {
     const csrfToken = randomBytes(16).toString('hex');
     session.csrfToken = csrfToken;
-    // save it in cookies with express session
     res.cookie('x-csrf-token', csrfToken, {
       httpOnly: false,
       expires: new Date(Date.now() + MINUTES_10),
     });
     return res.json({ csrfToken });
+  }
+
+  @Get('/ping')
+  getPing(): any {
+    return 'pong';
   }
 }

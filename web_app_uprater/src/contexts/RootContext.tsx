@@ -34,8 +34,6 @@ const RootContextProvider: React.FC<{ children: React.ReactNode }> = ({
     type: Types.INFO,
   });
 
-  console.log(notification);
-
   return (
     <RootContext.Provider
       value={{ rateModal, setRateModal, notification, setNotification }}

@@ -13,6 +13,7 @@ export const Notification: React.FC = () => {
   const { notification, setNotification } = useRootContext();
 
   useEffect(() => {
+    if (!notification.show) return;
     const timer = setTimeout(() => {
       setNotification({
         ...notification,
@@ -21,8 +22,6 @@ export const Notification: React.FC = () => {
     }, 5000);
     return () => clearTimeout(timer);
   }, [notification.show]);
-
-  console.log(colorType[notification.type]);
 
   return (
     <div

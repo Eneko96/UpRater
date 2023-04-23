@@ -42,13 +42,10 @@ const debounce = (func: any, wait: number) => { // eslint-disable-line
 };
 
 const getUsers = async (username: string) => {
-  const users = await fetchProxy<IUser | IUser[]>(
-    `http://localhost:3000/profile/${username}`,
-    {
-      method: 'GET',
-      credentials: 'include',
-    },
-  );
+  const users = await fetchProxy<IUser | IUser[]>(`/profile/${username}`, {
+    method: 'GET',
+    credentials: 'include',
+  });
   return users;
 };
 
@@ -74,7 +71,7 @@ export const CreateRate = () => {
     const value = target.value.value;
     const anon = target.anon.checked;
 
-    const { status } = await fetchProxy('http://localhost:3000/rate', {
+    const { status } = await fetchProxy('/rate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
