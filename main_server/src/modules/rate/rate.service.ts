@@ -59,7 +59,11 @@ export class RateService {
       },
       {
         $addFields: {
-          profile_from: '$user_from_profile.username',
+          profile_from: {
+            $mergeObjects: {
+              username: { $arrayElemAt: ['$user_from_profile.username', 0] },
+            },
+          },
         },
       },
       {

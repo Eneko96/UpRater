@@ -9,6 +9,7 @@ import { Page } from './modules/Page/Page';
 const router = createBrowserRouter([
   {
     path: '/',
+    errorElement: <div>Not found</div>,
     element: (
       <Page>
         <Outlet />

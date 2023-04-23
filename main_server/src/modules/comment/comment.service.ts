@@ -5,7 +5,7 @@ import { User } from 'src/modules/auth/user.model';
 import { RateRepository } from 'src/modules/rate/rate.repository';
 import { Comment } from './comment.model';
 import { CommentRepository } from './comment.repository';
-import { CreateRateDto } from './dto/create-comment.dto';
+import { CreateCommentDTO } from './dto/create-comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -25,14 +25,10 @@ export class CommentService {
     });
   }
 
-  async createComment(
-    user: User,
-    comment: CreateRateDto,
-    rate_id: string,
-  ): Promise<Comment> {
+  async createComment(user: User, comment: CreateCommentDTO): Promise<Comment> {
     this.logger.log('Creating comment');
     try {
-      const rateObject = new mongoose.Types.ObjectId(rate_id);
+      const rateObject = new mongoose.Types.ObjectId(comment.rate_id);
       const Comment = await this.commentRepository.save(
         user,
         comment,

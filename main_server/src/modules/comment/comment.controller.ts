@@ -15,7 +15,7 @@ import { AuthenticatedGuard } from '../auth/authenticated.guard';
 import { CsrfInterceptor } from '../auth/csrf.interceptor';
 import { Comment } from './comment.model';
 import { CommentService } from './comment.service';
-import { CreateRateDto } from './dto/create-comment.dto';
+import { CreateCommentDTO } from './dto/create-comment.dto';
 
 @Controller('comment')
 @UseGuards(AuthenticatedGuard)
@@ -31,10 +31,9 @@ export class CommentController {
   @UseInterceptors(CsrfInterceptor)
   async createComment(
     @GetUser() user: User,
-    @Body() comment: CreateRateDto,
-    @Body('rate_id') rate_id: string,
+    @Body() comment: CreateCommentDTO,
   ): Promise<Comment> {
-    return this.commentService.createComment(user, comment, rate_id);
+    return this.commentService.createComment(user, comment);
   }
 
   @Delete()

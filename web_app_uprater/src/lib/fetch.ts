@@ -1,21 +1,23 @@
 import { redirect } from 'react-router-dom';
 
 const CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
-const CSRF_URI = 'http://localhost:3000/secoptions';
+const BASE_URI = 'http://localhost:3000';
+const CSRF_URI = '/secoptions';
 
 export const fetchProxy = async <T>(
   url: string,
   options: RequestInit = {},
 ): Promise<{ res: T; status: number }> => {
   if (CSRF_METHODS.includes(options.method || '')) {
-    const csrfResponse = await fetch(CSRF_URI, {
+    const csrfResponse = await fetch(BASE_URI + CSRF_URI, {
       method: 'GET',
       credentials: 'include',
     });
     const csrfToken = await csrfResponse.text();
 
-    const response = await fetch(url, {
+    const response = await fetch(BASE_URI + url, {
       ...options,
+      credentials: 'include',
       headers: {
         ...options.headers,
         'x-csrf-token': csrfToken,
@@ -26,7 +28,10 @@ export const fetchProxy = async <T>(
       status: response.status,
     };
   }
-  const response = await fetch(url, options);
+  const response = await fetch(BASE_URI + url, {
+    ...options,
+    credentials: 'include',
+  });
   if (response.status === 401) {
     redirect('/login');
   }
