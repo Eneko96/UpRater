@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug-pod
+spec:
+  containers:
+  - name: mongoimport-users
+    image: mongo
+    command: ["/bin/sh", "-c", "sleep 3600"]
+    volumeMounts:
+    - name: script-volume
+      mountPath: /scripts
+  restartPolicy: Never
+  volumes:
+  - name: script-volume
+    configMap:
+      name: script-configmap
+      items:
+      - key: migrate_data_users.json
+        path: migrate_data_users.json
+      - key: migrate_data_rates.json
+        path: migrate_data_rates.json
+      - key: migrate_data_profiles.json
+        path: migrate_data_profiles.json
+      - key: migrate.sh
+        path: migrate.sh

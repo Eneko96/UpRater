@@ -1,4 +1,5 @@
 import { FormEventHandler, useState } from 'react';
+import { Types, useRootContext } from '../../contexts/RootContext';
 import { fetchProxy } from '../../lib/fetch';
 import {
   CommentsDialog,
@@ -29,43 +30,37 @@ export const Card: React.FC<IRate> = ({
   profile_from,
   comments_count,
   _id,
-  user_from,
 }) => {
+  const { setNotification } = useRootContext();
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState<IComment[]>([]);
   const timeDiff = today.getTime() - new Date(created_at).getTime();
 
-  const handleAddComment: FormEventHandler<HTMLFormElement> = (e) => {
+  const handleAddComment: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
     const comment = formData.get('comment');
-    console.log(comment);
 
-    /**
-     * TODO: Send comment to server
-     * comment object shape
-     * {
-     * content: string,
-     * rate_id: string,
-     * user_id: string,
-     * created_at: string --> on server,
-     * reactions: --> on server,
-     * sentiment --> on server
-     */
-
-    const res = fetchProxy('/comment', {
+    const { status, res } = await fetchProxy<IComment>('/comment', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        content: 'tu puta madre',
+        content: comment,
         rate_id: _id,
       }),
     });
 
-    console.log(res);
+    if (status === 201) {
+      setNotification({
+        show: true,
+        message: 'Comment created successfully',
+        type: Types.SUCCESS,
+      });
+      setComments([...comments, res]);
+    }
 
     form.reset();
   };
@@ -84,7 +79,7 @@ export const Card: React.FC<IRate> = ({
   return (
     <>
       <div className="w-full max-w-sm border border-gray-200 rounded-lg shadow">
-        <div className="flex justify-end px-4 pt-4">
+        <div className="flex justify-end px-2 pt-2">
           <button
             id="dropdownButton"
             data-dropdown-toggle="dropdown"
@@ -173,7 +168,12 @@ export const Card: React.FC<IRate> = ({
           </small>
         </div>
       </div>
-      {showComments && <CommentsDialog comments={comments} />}
+      {showComments && (
+        <CommentsDialog
+          onClose={() => setShowComments(false)}
+          comments={comments}
+        />
+      )}
     </>
   );
 };

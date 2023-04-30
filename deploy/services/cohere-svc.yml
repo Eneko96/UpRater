@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.mdb.dev.yml -o deploy
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cohere-ms
+  name: cohere-ms
+spec:
+  type: NodePort
+  ports:
+    - name: "4000"
+      port: 4000
+      targetPort: 4000
+      nodePort: 30090
+  selector:
+    io.kompose.service: cohere-ms
+status:
+  loadBalancer: {}

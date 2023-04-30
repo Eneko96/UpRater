@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 
-export enum Types {
+export const enum Types {
   INFO = 'info',
   DANGER = 'danger',
   SUCCESS = 'success',

@@ -1,12 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from './components/Card/Card';
+import { HOST } from './constants';
+import { IRate, useRates } from './store/rates';
 
 function App() {
-  const [rates, setRates] = useState<any[]>([]);
+  const rates = useRates((state) => state.rates);
+  const setRates = useRates((state) => state.setRates);
   const navigate = useNavigate();
   const getRates = async () => {
-    const res = await fetch('http://localhost:3000/rate', {
+    const res = await fetch(HOST + '/rate', {
       credentials: 'include',
     });
     const status = await res.status;
@@ -14,7 +17,7 @@ function App() {
     const rates = await res.json();
     setRates(
       rates.sort(
-        (a: any, b: any) =>
+        (a: IRate, b: IRate) =>
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
       ),
     );

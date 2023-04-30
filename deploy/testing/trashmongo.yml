@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+spec:
+  serviceName: "mongo"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      initContainers:
+      - name: init-replica-set
+        image: mongo:4.4
+        command: ["/bin/bash", "-c"]
+        args:
+          - |
+            until mongo --host 10.244.0.3 --eval "print('waiting for connection')"
+            do
+              sleep 2
+            done
+            mongo --host mongo-0.mongo --eval "rs.initiate({
+              _id: 'dbrs',
+              version: 1,
+              members: [
+                { _id: 1, host: '10.244.0.3:27017:27017', priority: 3 },
+                { _id: 2, host: 'mongo-1.mongo:27017', priority: 2 },
+                { _id: 3, host: 'mongo-2.mongo:27017', priority: 1 }
+              ]
+            })"
+            sleep infinity
+        volumeMounts:
+        - name: mongo-scripts
+          mountPath: /scripts
+      containers:
+      - name: mongo
+        image: mongo:4.4
+        command: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
+        ports:
+        - containerPort: 27017
+      volumes:
+      - name: mongo-scripts
+        emptyDir: {}

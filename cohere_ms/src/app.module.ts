@@ -17,8 +17,9 @@ import { RbmqModule } from './rbmq/rbmq.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         const uri =
+          process.env.K8 ||
           configService.get('MONGO_URI') ||
-          'mongodb://mongo1:27017,mongo2:27017,mongo3:27017/uprater?replicaSet=dbrs';
+          'mongodb://mongo-0.mongo.default.svc.cluster.local:27017,mongo-1.mongo.default.svc.cluster.local:27017,mongo-2.mongo.default.svc.cluster.local:27017/uprater?replicaSet=rs0';
         return {
           uri,
           useUnifiedTopology: true,
