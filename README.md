@@ -6,7 +6,57 @@ Uprater is a Social Media Platform that allows users to rate and review other us
 
 Uprater is a project between some friends, and is being developed as a way to learn and practice new technologies.
 
-## Installation
+## Running the app for Kubernetes
+
+First enable the kubernetes in docker (settings, kuberentes icon, enable and reset)
+
+To stop the kubernetes in docker environment, go on settings and click on reset kubernetes cluster
+
+```bash
+# starting up the kubernetes cluster
+$ cd deploy
+$ chmod -x run-deploy.sh
+$ ./run-deploy-sh
+```
+
+For a friendlier ui, you can install Lens, which is a interface for clusters like kubernetes, once the kubernetes cluster
+is running, lens will automatically append it on the interface
+
+### To migrate data for the mongo replset
+
+```bash
+# migrate
+$ cd jobs
+# config.map is a one time addition, it appends the jsons to the cluster config map
+$ kubectl apply -f config-map.yml
+$ kubectl apply -f migrate.yml
+```
+
+## Docker-compose instance
+
+```bash
+
+# automatically start docker compose (weather windows or mac)
+# configure rabbit dashboard
+# open 4 terminals
+# show docker containers running
+$ chmod +x run.dev.sh
+# arguments --migrate and/or --panes can be added on the script
+$ ./run.dev.sh
+# example with args
+$ ./run.dev.sh --migrate
+
+```
+
+## Creating a rabbit password for the instance (!!DEPRECATED)
+
+```python
+
+python3 -c 'import hashlib;print(hashlib.sha256("mypassword".encode("utf-8")).hexdigest())'
+
+```
+
+## Manual installation
 
 The project is being developed using NestJS, a NodeJS framework, and MongoDB as the database. The project is also using Docker to run the database, and RabbitMQ as the message broker, so it is not necessary to install those dependencies.
 
@@ -26,6 +76,10 @@ $ yarn install
 ```
 
 ## Running the app (for each service)
+
+In case you don't want kubernetes or docker-compose to manage the servers, you can run it on local by your own by:
+
+You'd need a mongo instance on local as well as a rabbitmq instance
 
 ```bash
 # development
@@ -49,43 +103,4 @@ $ yarn run test:e2e
 
 # test coverage
 $ yarn run test:cov
-```
-
-## Docker Instance
-
-```bash
-
-# automatically start docker compose (weather windows or mac)
-# configure rabbit dashboard
-# open 4 terminals
-# show docker containers running
-$ chmod +x run.dev.sh
-# arguments --migrate and/or --panes can be added on the script
-$ ./run.dev.sh
-# example with args
-$ ./run.dev.sh --migrate
-
-# build compose for production (mongo)
-$ docker-compose build && ./dbstart-prod.sh
-
-# docker compose for development (mongo)
-$ docker-compose -f docker-compose.mdb.dev.yml build && ./dbstart.sh
-
-# to run a log in docker (-f if want to tail it)
-$ docker logs -f {{container_name}}
-```
-
-## Enabling RabbitMQ Dashboard (port 15672)
-
-```bash
-# it is not necessary anymore, unless you run it manually instead of with run.dev.sh
-docker exec -it rabbit rabbitmq-plugins enable rabbitmq_management
-```
-
-## Creating a rabbit password for the instance
-
-```python
-
-python3 -c 'import hashlib;print(hashlib.sha256("mypassword".encode("utf-8")).hexdigest())'
-
 ```
