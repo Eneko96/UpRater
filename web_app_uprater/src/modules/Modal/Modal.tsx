@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 
 interface ITabComposition {
-  Title: React.FC<any>;
-  Body: React.FC<any>;
-  Footer: React.FC<any>;
+  Title: React.FC<{ children: React.ReactNode; className: string }>;
+  Body: React.FC<{ children: React.ReactNode; className: string }>;
+  Footer: React.FC<{ children: React.ReactNode; className: string }>;
 }
 
 export const Modal: React.FC<{
@@ -45,15 +45,22 @@ export const Modal: React.FC<{
   ) : null;
 };
 
-const Title: React.FC<any> = ({ children }) => {
+const Title: React.FC<{ children: React.ReactNode; className: string }> = ({
+  children,
+}) => {
   return <h1 className="text-2xl font-bold">{children}</h1>;
 };
 
-const Body: React.FC<any> = ({ children, className }) => {
+const Body: React.FC<{ children: React.ReactNode; className: string }> = ({
+  children,
+  className,
+}) => {
   return <div className={`text-sm ${className}`}>{children}</div>;
 };
 
-const Footer: React.FC<any> = ({ children }) => {
+const Footer: React.FC<{ children: React.ReactNode; className: string }> = ({
+  children,
+}) => {
   return <div className="flex justify-end">{children}</div>;
 };
 
