@@ -4,54 +4,26 @@
 echo -e "\033[32mRunning commit-msg hook"
 commit="$(cat $1)"
 branch=$(git rev-parse --abbrev-ref HEAD)
-kind=$(echo $branch| cut -d '/' -f1)
+kind=$(echo $branch | cut -d '/' -f1)
 echo $kind
 
-case $branch in
-    "feature"*)
-        echo -e "\033[32mFeature branch"
-        echo "[FEAT] - $commit" > $1
-        exit
-        ;;
-    "bugfix"*)
-        echo -e "\033[32mBugfix branch"
-        echo "[BUGFIX] - $commit" > $1
-        ;;
-    "hotfix"*)
-        echo -e "\033[32mHotfix branch"
-        echo "[HOTFIX] - $commit" > $1
-        ;;
-    "release"*)
-        echo -e "\033[32mRelease branch"
-        echo "[RELEASE] - $commit" > $1
-        ;;
-    "docs"*)
-        echo -e "\033[32mDocs branch"
-        echo "[DOCS] - $commit" > $1
-        ;;
-    "test"*)
-        echo -e "\033[32mTest branch"
-        echo "[TEST] - $commit" > $1
-        ;;
-    "refactor"*)
-        echo -e "\033[32mRefactor branch"
-        echo "[REFACTOR] - $commit" > $1
-        ;;
-    "style"*)
-        echo -e "\033[32mStyle branch"
-        echo "[CI] - $commit" > $1
-        ;;
-    "wip"*)
-        echo -e "\033[32mWIP branch"
-        echo "[WIP] - $commit" > $1
-        ;;
-    "main"* | "master"*)
-        echo -e "\033[32mMain branch"
-        echo "[MAIN] - $commit" > $1
-        ;;
-    *)
-        echo -e "\033[31mInvalid branch name"
-        exit 1
-        ;;
-esac
-exit
+labels="feature=[FEAT] bugfix=[BUGFIX] hotfix=[HOTFIX] release=[RELEASE] docs=[DOCS] test=[TEST] refactor=[REFACTOR] style=[CI] wip=[WIP] main=[MAIN] master=[MAIN]"
+
+label=""
+for entry in $labels; do
+    prefix=$(echo $entry | cut -d '=' -f1)
+    value=$(echo $entry | cut -d '=' -f2)
+    if [[ "$branch" == "$prefix"* ]]; then
+        label=$value
+        break
+    fi
+done
+
+if [ -n "$label" ]; then
+    echo -e "\033[32m$(echo ${kind:0:1} | tr '[:lower:]' '[:upper:]')${kind:1} branch"
+    echo "$label - $commit" > "$1"
+    exit 0
+else
+    echo -e "\033[31mInvalid branch name"
+    exit 1
+fi

@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.mdb.dev.yml -o deploy
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cohere-ms
+  name: cohere-ms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: cohere-ms
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.mdb.dev.yml -o deploy
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/uprater-webnet: "true"
+        io.kompose.service: cohere-ms
+    spec:
+      containers:
+        - env:
+            - name: STAGE
+              value: k8
+            - name: DOCKER
+              value: "true"
+            - name: MONGO_URI
+              value: mongodb://mongo-0.mongo.default.svc.cluster.local:27017,mongo-1.mongo.default.svc.cluster.local:27017,mongo-2.mongo.default.svc.cluster.local:27017/uprater?replicaSet=rs0
+            - name: RB_URL
+              value: rbmq://user@mypasswordrabbit:5672
+            - name: RB_USER
+              value: guest
+            - name: RB_PASS
+              value: guest
+            - name: USER_QUEUE
+              value: users
+            - name: USER_EXCHANGE
+              value: users
+            - name: SERVICE_PORT
+              value: "4000"
+            - name: RABBIT_MQ_URI
+              value: amqp://user:mypassword@rabbit:5672
+            - name: RABBIT_MQ_COHERE_QUEUE
+              value: cohere_mongo
+            - name: WAIT_HOSTS
+              value: rabbit:5672
+          image: eneko2496/cohere-ms:latest
+          name: cohere-ms
+          ports:
+            - containerPort: 4000
+          resources: {}
+          volumeMounts:
+            - mountPath: /app
+              name: cohere-ms-claim0
+            - mountPath: /app/node_modules
+              name: cohere-ms-claim1
+      restartPolicy: Always
+      volumes:
+        - name: cohere-ms-claim0
+          persistentVolumeClaim:
+            claimName: cohere-ms-claim0
+        - name: cohere-ms-claim1
+          persistentVolumeClaim:
+            claimName: cohere-ms-claim1
+status: {}

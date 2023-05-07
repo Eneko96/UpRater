@@ -3,7 +3,7 @@ import { User } from 'src/modules/auth/user.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Rate, RateDocument } from './rate.model';
 import { Topics } from './types';
-import {
+import mongoose, {
   Aggregate,
   AggregateOptions,
   Model,
@@ -75,7 +75,7 @@ export class RateRepository {
       user_id: user._id,
       comments_count: 0,
       reactions_count: 0,
-      user_to: rate.user_to,
+      user_to: new mongoose.Types.ObjectId(rate.user_to),
       user_from: user._id,
       created_at: new Date().toISOString(),
     });

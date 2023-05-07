@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { HOST } from '../../constants';
 import { useRootContext } from '../../contexts/RootContext';
-import { useTriggers } from '../../store/triggers';
 const paths = [
   {
     name: 'Feed',
@@ -18,7 +18,7 @@ export const NavBar = () => {
   const { setRateModal } = useRootContext();
 
   const handleLogout = async () => {
-    const res = await fetch('http://localhost:3000/users/logout', {
+    const res = await fetch(HOST + '/users/logout', {
       headers: {
         'Content-Type': 'application/json',
       },

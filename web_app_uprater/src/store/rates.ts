@@ -1,21 +1,25 @@
 import { create } from 'zustand';
 
-type Rate = {
-  _id: string;
+type ProfileFrom = {
+  username: string;
+};
+export interface IRate {
   comment: string;
   value: number;
-  profile_from: string[];
-  user_to: string;
-  user_from: string;
+  anon: boolean;
   created_at: string;
-};
+  _id: number;
+  profile_from: ProfileFrom;
+  comments_count: number;
+  user_from: string;
+}
 
 interface RateStore {
-  rates: Rate[];
-  setRates: (rates: Rate[]) => void;
+  rates: IRate[];
+  setRates: (rates: IRate[]) => void;
 }
 
 export const useRates = create<RateStore>((set) => ({
   rates: [],
-  setRates: (rates: Rate[]) => set({ rates }),
+  setRates: (rates: IRate[]) => set({ rates }),
 }));

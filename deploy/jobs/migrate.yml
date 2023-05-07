@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: mongoimport-users
+        image: mongo
+        command: ["/bin/bash", "-c"]
+        args: ["mongoimport --host mongo --db uprater --collection users --file /scripts/migrate_data_users.json --jsonArray && mongoimport --host mongo --db uprater --collection rates --file /scripts/migrate_data_rates.json --jsonArray && mongoimport --host mongo --db uprater --collection profiles --file /scripts/migrate_data_profiles.json --jsonArray"]
+
+        volumeMounts:
+        - name: script-volume
+          mountPath: /scripts
+      restartPolicy: Never
+      volumes:
+      - name: script-volume
+        configMap:
+          name: script-configmap
+          items:
+          - key: migrate_data_users.json
+            path: migrate_data_users.json
+          - key: migrate_data_rates.json
+            path: migrate_data_rates.json
+          - key: migrate_data_profiles.json
+            path: migrate_data_profiles.json
+          - key: migrate.sh
+            path: migrate.sh

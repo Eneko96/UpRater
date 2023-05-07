@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { useRootContext } from '../../contexts/RootContext';
 import { fetchProxy } from '../../lib/fetch';
-import { useAuth } from '../../store/auth';
 import { Modal } from '../Modal/Modal';
 import { Types } from '../../contexts/RootContext';
+import { IRate, useRates } from '../../store/rates';
 interface IUser {
   _id: string;
   username: string;
@@ -50,7 +50,8 @@ const getUsers = async (username: string) => {
 };
 
 export const CreateRate = () => {
-  const csrf = useAuth((state) => state.csrf);
+  const setRates = useRates((state) => state.setRates);
+  const rates = useRates((state) => state.rates);
   const { setRateModal, rateModal, setNotification, notification } =
     useRootContext();
   const [users, setUsers] = useState<IUser[]>([]);
@@ -71,11 +72,10 @@ export const CreateRate = () => {
     const value = target.value.value;
     const anon = target.anon.checked;
 
-    const { status } = await fetchProxy('/rate', {
+    const { status, res: rate } = await fetchProxy<IRate>('/rate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-csrf-token': csrf as string,
       },
       credentials: 'include',
       body: JSON.stringify({
@@ -105,7 +105,12 @@ export const CreateRate = () => {
       });
     }
     // setTriggers({ ...triggers, createRate: false, notification: true });
-    // setRates([...rates, rate].sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()))
+    setRates(
+      [...rates, rate].sort(
+        (a: IRate, b: IRate) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      ),
+    );
   };
 
   const handleSearch = debounce(
@@ -118,8 +123,7 @@ export const CreateRate = () => {
     400,
   );
 
-  const handleSelectUser = (usr: IUser) => (e: any) => {
-    console.log(usr, e);
+  const handleSelectUser = (usr: IUser) => () => {
     if (ref.current) ref.current.value = usr.username;
     setSelectedUser(usr);
     setShowDropdown(false);

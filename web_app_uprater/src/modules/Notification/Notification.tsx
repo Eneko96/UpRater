@@ -29,7 +29,7 @@ export const Notification: React.FC = () => {
         colorType[notification.type]
       } ${
         notification.show ? 'absolute' : 'hidden'
-      } rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400`}
+      } rounded-lg bg-blue-50 dark:bg-gray-800`}
       role="alert"
     >
       <span className="font-medium"></span>

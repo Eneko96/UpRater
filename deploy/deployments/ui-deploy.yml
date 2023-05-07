@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.mdb.dev.yml -o deploy
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ui
+  name: ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: ui
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.mdb.dev.yml -o deploy
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/uprater-default: "true"
+        io.kompose.service: ui
+    spec:
+      containers:
+        - env:
+            - name: VITE_HOST
+              value: http://localhost:30070
+
+          image: eneko2496/ui:latest
+          name: ui
+          ports:
+            - containerPort: 5173
+          resources: {}
+          volumeMounts:
+            - mountPath: /app
+              name: ui-claim0
+            - mountPath: /app/node_modules
+              name: ui-claim1
+      restartPolicy: Always
+      volumes:
+        - name: ui-claim0
+          persistentVolumeClaim:
+            claimName: ui-claim0
+        - name: ui-claim1
+          persistentVolumeClaim:
+            claimName: ui-claim1
+status: {}
