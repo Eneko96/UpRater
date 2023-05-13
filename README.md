@@ -8,7 +8,7 @@ Uprater is a project between some friends, and is being developed as a way to le
 
 ### Before going hands on
 
-- **(For developers and contributors)**On root level, run ```bash chmod +x init.sh``` and ```bash ./init.sh```, this, will change the path of commit-msg hook.
+- ⚠️⚠️ **Only for contributors** ⚠️⚠️ On root level, run ```bash chmod +x init.sh``` and ```bash ./init.sh```, this, will change the path of commit-msg hook.
 - Remember that the branches have to follow the [conventional commits](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13), if there is any missing, the dict that contains and manage them is located in **.husky/commit-msg**
 
 ## Running the app for Kubernetes
