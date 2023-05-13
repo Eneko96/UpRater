@@ -2,13 +2,13 @@
 
 ## Description
 
-Uprater is a Social Media Platform that allows users to rate and review other users, as well as comment on those reviews. Users can also follow other users, and see how are they being rated in their feed. Having as well a dashboard with metrics about their own ratings how are they being rated under several categories.
+Uprater is a Social Media Platform that allows users to rate and review other users, as well as comment on those reviews. Users can also follow other users, and see how are they being rated in their feed. In addition to a dashboard with metrics about their own ratings how are they being rated under several categories.
 
 Uprater is a project between some friends, and is being developed as a way to learn and practice new technologies.
 
 ### Before going hands on
 
-- On root level, npm i, it will give a tool for making conventional commits via husky, its a workaround, npm will be deleted in a furhter release
+- **(For developers and contributors)**On root level, run ```bash chmod +x init.sh``` and ```bash ./init.sh```, this, will change the path of commit-msg hook.
 - Remember that the branches have to follow the [conventional commits](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13), if there is any missing, the dict that contains and manage them is located in **.husky/commit-msg**
 
 ## Running the app for Kubernetes
