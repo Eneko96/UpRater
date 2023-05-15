@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ReactionService } from './reaction.service';
-import { CommentController } from './reaction.controller';
+import { ReactionController } from './reaction.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ReactionSchema } from './reaction.model';
-import { RateModule } from 'src/modules/rate/rate.module';
+import { RateModule } from '../rate/rate.module';
 import { ReactionRepository } from './reaction.repository';
 
 @Module({
@@ -11,7 +11,7 @@ import { ReactionRepository } from './reaction.repository';
     MongooseModule.forFeature([{ name: 'Reaction', schema: ReactionSchema }]),
     RateModule,
   ],
-  controllers: [CommentController],
+  controllers: [ReactionController],
   providers: [ReactionService, ReactionRepository],
 })
 export class ReactionModule {}

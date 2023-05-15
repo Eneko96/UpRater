@@ -9,8 +9,8 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
-import { GetUser } from 'src/modules/auth/get-user.decorator';
-import { User } from 'src/modules/auth/user.model';
+import { GetUser } from '../auth/get-user.decorator';
+import { User } from '../auth/user.model';
 import { AuthenticatedGuard } from '../auth/authenticated.guard';
 import { CsrfInterceptor } from '../auth/csrf.interceptor';
 import { CreateReactionDto } from './dto/create-reaction.dto';
@@ -19,7 +19,7 @@ import { ReactionService } from './reaction.service';
 
 @Controller('reaction')
 @UseGuards(AuthenticatedGuard)
-export class CommentController {
+export class ReactionController {
   constructor(private readonly reactionService: ReactionService) {}
 
   @Get()

@@ -1,20 +1,13 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { User } from 'src/modules/auth/user.model';
+import { User } from '../auth/user.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Rate, RateDocument } from './rate.model';
 import { Topics } from './types';
-import mongoose, {
-  Aggregate,
-  AggregateOptions,
-  Model,
-  ObjectId,
-  PipelineStage,
-  Types,
-} from 'mongoose';
+import mongoose, { Aggregate, Model, ObjectId, Types } from 'mongoose';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-user.dto';
-import { UPDATE_STRATEGY_OPTIONS } from 'src/lib/updateStrategy';
-import { pipe } from 'src/lib/pipe';
+import { UPDATE_STRATEGY_OPTIONS } from '../../lib/updateStrategy';
+import { pipe } from '../../lib/pipe';
 
 @Injectable()
 export class RateRepository {

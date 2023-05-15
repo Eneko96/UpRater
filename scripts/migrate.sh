@@ -9,5 +9,6 @@ mongoimport --host dbrs/mongo1:27017,mongo2:27017,mongo3:27017 --db uprater --co
 mongoimport --host dbrs/mongo1:27017,mongo2:27017,mongo3:27017 --db uprater --collection rates --file /scripts/migrate_data_rates.json --jsonArray
 mongoimport --host dbrs/mongo1:27017,mongo2:27017,mongo3:27017 --db uprater --collection profiles --file /scripts/migrate_data_profiles.json --jsonArray
 
+# for testing db test
 
 

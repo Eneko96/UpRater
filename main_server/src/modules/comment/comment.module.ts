@@ -3,7 +3,7 @@ import { CommentService } from './comment.service';
 import { CommentController } from './comment.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CommentSchema } from './comment.model';
-import { RateModule } from 'src/modules/rate/rate.module';
+import { RateModule } from '../rate/rate.module';
 import { CommentRepository } from './comment.repository';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 

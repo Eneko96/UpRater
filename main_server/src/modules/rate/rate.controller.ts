@@ -10,8 +10,8 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { GetUser } from 'src/modules/auth/get-user.decorator';
-import { User } from 'src/modules/auth/user.model';
+import { GetUser } from '../auth/get-user.decorator';
+import { User } from '../auth/user.model';
 import { Rate } from './rate.model';
 import { RateService } from './rate.service';
 import { CreateRateDto } from './dto/create-rate.dto';

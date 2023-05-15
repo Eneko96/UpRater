@@ -1,6 +1,6 @@
 import { Injectable, Logger, ForbiddenException, Inject } from '@nestjs/common';
 import mongoose, { Aggregate, ObjectId } from 'mongoose';
-import { User } from 'src/modules/auth/user.model';
+import { User } from '../auth/user.model';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-user.dto';
 import { Rate } from './rate.model';

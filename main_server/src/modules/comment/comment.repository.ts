@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Comment, CommentDocument } from './comment.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId, Types } from 'mongoose';
-import { User } from 'src/modules/auth/user.model';
+import { User } from '../auth/user.model';
 import { CreateCommentDTO } from './dto/create-comment.dto';
 
 @Injectable()
@@ -48,6 +48,26 @@ export class CommentRepository {
   async findAll(): Promise<Comment[]> {
     this.logger.log('Getting all comments');
     return this.commentsRepository.find();
+  }
+
+  async update(
+    user: User,
+    comment: Partial<Comment> | Comment,
+    comment_id: string,
+  ): Promise<Comment> {
+    this.logger.log('Updating comment');
+    console.log(comment, comment_id);
+
+    return this.commentsRepository.findOneAndUpdate(
+      {
+        _id: comment_id,
+        user_id: user._id,
+      },
+      {
+        ...comment,
+      },
+      { new: true },
+    );
   }
 
   async delete(user: User, comment_id: ObjectId): Promise<Comment> {

@@ -1,11 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import mongoose, { ObjectId } from 'mongoose';
-import { User } from 'src/modules/auth/user.model';
-import { RateRepository } from 'src/modules/rate/rate.repository';
+import { User } from '../auth/user.model';
+import { RateRepository } from '../rate/rate.repository';
 import { Comment } from './comment.model';
 import { CommentRepository } from './comment.repository';
 import { CreateCommentDTO } from './dto/create-comment.dto';
+import { UpdateCommentDTO } from './dto/update-comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -36,6 +37,26 @@ export class CommentService {
       );
       this.rateRepository.incrementCommentCount(rateObject);
       this.client.emit('comment_created', Comment);
+      return Comment;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  async updateComment(
+    user: User,
+    comment: UpdateCommentDTO,
+    comment_id: string,
+  ): Promise<Comment> {
+    this.logger.log('Updating comment');
+    try {
+      const Comment = await this.commentRepository.update(
+        user,
+        comment,
+        comment_id,
+      );
+      console.log(Comment);
       return Comment;
     } catch (error) {
       this.logger.error(error);
