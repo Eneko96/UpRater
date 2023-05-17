@@ -4,7 +4,6 @@ metadata:
   annotations:
     kompose.cmd: kompose convert -f docker-compose.mdb.dev.yml -o deploy
     kompose.version: 1.28.0 (HEAD)
-  creationTimestamp: null
   labels:
     io.kompose.service: ui
   name: ui
@@ -20,7 +19,6 @@ spec:
       annotations:
         kompose.cmd: kompose convert -f docker-compose.mdb.dev.yml -o deploy
         kompose.version: 1.28.0 (HEAD)
-      creationTimestamp: null
       labels:
         io.kompose.network/uprater-default: "true"
         io.kompose.service: ui
