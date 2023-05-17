@@ -20,4 +20,4 @@ docker-compose exec -T $host mongo --quiet test --eval "db.profiles.insert($prof
 docker-compose exec -it node_test sh -c "npm run test"
 
 
-docker-compose exec $host mongo --eval "db.getSiblingDB('test').dropDatabase()"
+docker-compose exec $host mongo --quiet --eval "db.getSiblingDB('test').dropDatabase()" > /dev/null
