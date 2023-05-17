@@ -1,0 +1,33 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Login to Docker registry
+      run: echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin <your-registry-url>
+
+    - name: Build and push node container
+      run: |
+        cd main_server
+        docker build -t node:$(date +%s) .
+        docker push node:$(date +%s)
+
+    - name: Build and push cohere container
+      run: |
+        cd cohere_ms
+        docker build -t cohere-ms:$(date +%s) .
+        docker push cohere-ms:$(date +%s)
+
+    - name: Build and push ui container
+      run: |
+        cd web_app_uprater
+        docker build -t ui:$(date +%s) .
+        docker push ui:$(date +%s)
