@@ -25,17 +25,17 @@ jobs:
     - name: Build and push node container
       run: |
         cd main_server
-        docker build -t node:$(date +%s) .
-        docker push node:$(date +%s)
+        docker build -t node:latest .
+        docker push node:latest
 
     - name: Build and push cohere container
       run: |
         cd cohere_ms
-        docker build -t cohere-ms:$(date +%s) .
-        docker push cohere-ms:$(date +%s)
+        docker build -t cohere-ms:latest .
+        docker push cohere-ms:latest
 
     - name: Build and push ui container
       run: |
         cd web_app_uprater
-        docker build -t ui:$(date +%s) .
-        docker push ui:$(date +%s)
+        docker build -t ui:latest .
+        docker push ui:latest
