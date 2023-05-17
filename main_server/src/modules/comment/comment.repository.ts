@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Comment, CommentDocument } from './comment.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId, Types } from 'mongoose';
-import { User } from '../auth/user.model';
+import { User } from '@auth/user.model';
 import { CreateCommentDTO } from './dto/create-comment.dto';
 
 @Injectable()

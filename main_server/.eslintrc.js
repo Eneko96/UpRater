@@ -22,4 +22,27 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
   },
+  paths: {
+    "@app/*": [
+      "src/modules/app/*"
+    ],
+    "@comment/*": [
+      "src/modules/comment/*"
+    ],
+    "@profile/*": [
+      "src/modules/profile/*"
+    ],
+    "@rate/*": [
+      "src/modules/rate/*"
+    ],
+    "@users/*": [
+      "src/modules/users/*"
+    ],
+    "@lib/*": [
+      "src/lib/*"
+    ],
+    "@__tests__/*": [
+      "src/__tests__/*"
+    ],
+  }
 };

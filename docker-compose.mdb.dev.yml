@@ -34,6 +34,26 @@ services:
     volumes:
       - ./main_server:/app
       - /app/node_modules
+  node_test:
+    container_name: node_test
+    restart: always
+    build:
+      context: ./main_server
+      dockerfile: dev.Dockerfile
+    ports:
+      - "3030:3000"
+    links:
+      - mongo1
+    depends_on:
+      - mongo1
+    networks:
+      - webnet
+    environment:
+      STAGE: test
+      WAIT_HOSTS: mongo1:27017
+    volumes:
+      - ./main_server:/app
+      - /app/node_modules
   cohere_ms:
     container_name: cohere_ms
     restart: always
