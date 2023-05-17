@@ -7,8 +7,6 @@ profiles=$(cat ../scripts/migrate_data_profiles.json)
 host=$(docker-compose exec mongo1 mongo --quiet --eval "db.isMaster().primary" | awk -F: '{print $1}')
 echo "host: $host"
 
-docker-compose exec $host mongo --eval "db.getSiblingDB('test').dropDatabase()"
-
 # migrate data to test db
 users=$(echo "$users" | jq '[.[] | ._id = ._id["$oid"]]') 
 echo "users: $users"
@@ -20,3 +18,6 @@ docker-compose exec -T $host mongo --quiet test --eval "db.profiles.insert($prof
 
 
 docker-compose exec -it node_test sh -c "npm run test"
+
+
+docker-compose exec $host mongo --eval "db.getSiblingDB('test').dropDatabase()"
