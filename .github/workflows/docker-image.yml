@@ -5,6 +5,8 @@ on:
     types:
       - "closed"
     branches: [ main ]
+  push:
+    branches: [ features/test-init ]
 
 jobs:
   build:
