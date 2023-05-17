@@ -97,15 +97,11 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
-## Test (for each service)
+## Test (for main_server)
 
 ```bash
-# unit tests
-$ yarn run test
-
 # e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+$ chmod -x main_server/__tests__/init.sh
+$ cd main_server
+$ yarn run test:run
 ```

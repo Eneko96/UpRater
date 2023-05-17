@@ -9,8 +9,8 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { GetUser } from 'src/modules/auth/get-user.decorator';
-import { User } from 'src/modules/auth/user.model';
+import { GetUser } from '../auth/get-user.decorator';
+import { User } from '../auth/user.model';
 import { AuthenticatedGuard } from '../auth/authenticated.guard';
 import { CsrfInterceptor } from '../auth/csrf.interceptor';
 import { CreateProfileDto } from './dto/create-profile.dto';

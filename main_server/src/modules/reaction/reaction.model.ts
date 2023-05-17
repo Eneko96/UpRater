@@ -19,4 +19,7 @@ export class Reaction extends Document {
   reaction: string;
 }
 
+// type without the Document methods
+export type ReactionType = Omit<Reaction, keyof Document>;
+
 export const ReactionSchema = SchemaFactory.createForClass(Reaction);

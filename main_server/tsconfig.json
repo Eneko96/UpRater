@@ -16,6 +16,32 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@app/*": [
+        "src/modules/app/*"
+      ],
+      "@comment/*": [
+        "src/modules/comment/*"
+      ],
+      "@profile/*": [
+        "src/modules/profile/*"
+      ],
+      "@rate/*": [
+        "src/modules/rate/*"
+      ],
+      "@users/*": [
+        "src/modules/users/*"
+      ],
+      "@lib/*": [
+        "src/lib/*"
+      ],
+      "@__tests__/*": [
+        "__tests__/*"
+      ],
+      "@auth/*": [
+        "src/modules/auth/*"
+      ],
+    }
   }
 }
