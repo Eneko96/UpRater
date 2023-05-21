@@ -51,7 +51,8 @@ spec:
               value: B3yFEFh14ZrzFoFDBMy6rEFKzBrSsP4qEPQXeSQN
             - name: WAIT_HOSTS
               value: mongo1:27017
-          image: eneko2496/main_server:latest
+          image: eneko2496/node:latest
+          imagePullPolicy: "Always"
           name: node
           ports:
             - containerPort: 3000
