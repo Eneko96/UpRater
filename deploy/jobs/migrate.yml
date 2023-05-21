@@ -7,10 +7,20 @@ spec:
     spec:
       containers:
       - name: mongoimport-users
-        image: mongo
-        command: ["/bin/bash", "-c"]
-        args: ["mongoimport --host mongo --db uprater --collection users --file /scripts/migrate_data_users.json --jsonArray && mongoimport --host mongo --db uprater --collection rates --file /scripts/migrate_data_rates.json --jsonArray && mongoimport --host mongo --db uprater --collection profiles --file /scripts/migrate_data_profiles.json --jsonArray"]
-
+        image: mongo:4.4
+        command: 
+          - "/bin/bash"
+          - "-c"
+          - |
+            echo "Starting data migration..."
+            echo "Waiting for MongoDB to become ready..."
+            until mongo --host mongo --eval "db.adminCommand('ping')"; do sleep 2; done
+            echo "Waiting for election"
+            until mongo --host mongodb://mongo --eval "rs.isMaster().ismaster"; do sleep 2; done
+            echo "MongoDB is ready. Starting data import..."
+            mongoimport --host rs0/mongo-0.mongo,mongo-1.mongo,mongo-2.mongo --db uprater --collection users --file /scripts/migrate_data_users.json --jsonArray
+            mongoimport --host rs0/mongo-0.mongo,mongo-1.mongo,mongo-2.mongo --db uprater --collection rates --file /scripts/migrate_data_rates.json --jsonArray
+            mongoimport --host rs0/mongo-0.mongo,mongo-1.mongo,mongo-2.mongo --db uprater --collection profiles --file /scripts/migrate_data_profiles.json --jsonArray
         volumeMounts:
         - name: script-volume
           mountPath: /scripts

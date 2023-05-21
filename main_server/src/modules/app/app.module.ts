@@ -23,6 +23,7 @@ import { UsersModule } from '../users/users.module';
       useFactory: async (configService: ConfigService) => {
         const uri =
           configService.get('MONGO_URI') ||
+          process.env.MONGO_URI ||
           'mongodb://mongo-0.mongo.default.svc.cluster.local:27017,mongo-1.mongo.default.svc.cluster.local:27017,mongo-2.mongo.default.svc.cluster.local:27017/uprater?replicaSet=rs0';
         return {
           uri,
