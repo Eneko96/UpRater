@@ -10,4 +10,5 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["yarn", "start:dev"]
+CMD ["yarn", "start:test"]
+# CMD ["yarn", "start:test"]
