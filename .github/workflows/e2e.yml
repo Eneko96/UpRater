@@ -17,6 +17,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Navigate to main_server directory
+        run: cd main_server
+
       - name: Install dependencies
         working-directory: ./main_server
         run: npm ci
