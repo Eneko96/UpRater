@@ -19,8 +19,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prepare": "husky install"
+    "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
@@ -43,7 +42,6 @@
     "cohere-ai": "^6.2.0",
     "cookie-parser": "^1.4.6",
     "express-session": "^1.17.3",
-    "husky": "^8.0.3",
     "mongoose": "^6.8.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
