@@ -25,7 +25,9 @@ jobs:
         run: npm i -E
 
       - name: Install MongoDB tools
-        run: sudo apt-get update && sudo apt-get install -y mongodb
+        run: |
+          wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2004-x86_64-100.6.1.deb
+          sudo dpkg -i mongodb-database-tools-ubuntu2004-x86_64-100.6.1.deb
 
       - name: Run migrations
         working-directory: ./main_server
