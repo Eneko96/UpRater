@@ -22,7 +22,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./main_server
-        run: npm ci
+        run: npm i -E
 
       - name: Run migrations
         working-directory: ./main_server
