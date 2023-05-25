@@ -51,12 +51,6 @@ jobs:
           sleep 10
           curl http://localhost:3000
 
-      - name: Wait for Node instance to be running
-        run: |
-          sleep 10
-          echo "wait for node instance to be open"
-          npx wait-on http://localhost:3000
-
       - name: Run tests
         working-directory: ./main_server
         run: npm run test
