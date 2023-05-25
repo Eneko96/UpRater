@@ -43,7 +43,7 @@ jobs:
 
       - name: Run server 
         working-directory: ./main_server
-        run: npm run start:test &
+        run: npm run start:test 
 
       - name: Wait for Node instance to be running
         run: npx wait-on http://localhost:3000
