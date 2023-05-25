@@ -1,5 +1,9 @@
 name: MongoDB Workflow
 on:
+  pull_request:
+    types: 
+      - opened
+      - synchronize
   workflow_dispatch:
 
 jobs:
@@ -7,19 +11,53 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set up MongoDB
-      uses: docker/setup-mongodb@v1
-      with:
-        mongodb-version: '4.4'
+      - name: Set up MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: "4.4"
+          mongodb-replica-set: rs0
+          mongodb-port: 27017
 
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Navigate to main_server directory
+        run: cd main_server
+   
+      - name: Create .env.stage.test
+        run: |
+          echo "pwd $(ls)"
+          cd main_server
+          echo "MONGO_URI=mongodb://localhost:27017" >> .env.stage.test
+          echo "DB_DATABASE=uprater" >> .env.stage.test
+          echo "JWT_SECRET=bVT8gpxLvd2P(!{wwyAe:[Q@UF(LYev(" >> .env.stage.test
 
-    - name: Run migrations
-      run: npm run migrate
+      - name: Install dependencies
+        working-directory: ./main_server
+        run: npm i -E
 
-    - name: Run tests
-      run: npm run test
+      - name: Install MongoDB tools
+        run: |
+          wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2004-x86_64-100.6.1.deb
+          sudo dpkg -i mongodb-database-tools-ubuntu2004-x86_64-100.6.1.deb
+
+      - name: Run migrations
+        working-directory: ./main_server
+        run: npm run migrate
+
+      - name: Run server 
+        working-directory: ./main_server
+        run: npm run start:test & 
+      
+      - name: debug
+        run: |
+          echo "Checking if Node.js server is running..."
+          sleep 5 
+          while ! curl -s http://localhost:3000; do
+            echo "Node.js server not yet available. Retrying in 5 seconds..."
+            sleep 5
+          done
+
+      - name: Run tests
+        working-directory: ./main_server
+        run: npm run test
