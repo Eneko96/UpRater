@@ -23,6 +23,7 @@ jobs:
       - name: Create .env.stage.test
         run: |
           echo "pwd $(ls)"
+          cd main_server
           echo "MONGO_URI=mongodb://localhost:27017" >> .env.stage.test
           echo "DB_DATABASE=uprater" >> .env.stage.test
           echo "JWT_SECRET=bVT8gpxLvd2P(!{wwyAe:[Q@UF(LYev(" >> .env.stage.test
