@@ -44,6 +44,12 @@ jobs:
       - name: Run server 
         working-directory: ./main_server
         run: npm run start:test & 
+      
+      - name: debug
+        run: |
+          echo "Checking if Node.js server is running..."
+          sleep 10
+          curl http://localhost:3000
 
       - name: Wait for Node instance to be running
         run: |
