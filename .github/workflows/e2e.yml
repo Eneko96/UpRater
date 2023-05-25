@@ -20,9 +20,9 @@ jobs:
       - name: Navigate to main_server directory
         run: cd main_server
    
-      - name: Create env.stage.test
+      - name: Create .env.stage.test
         run: |
-          echo "VAR_NAME=1" >> .env.stage.test
+          echo "pwd $(ls)"
           echo "MONGO_URI=mongodb://localhost:27017" >> .env.stage.test
           echo "DB_DATABASE=uprater" >> .env.stage.test
           echo "JWT_SECRET=bVT8gpxLvd2P(!{wwyAe:[Q@UF(LYev(" >> .env.stage.test
@@ -42,7 +42,10 @@ jobs:
 
       - name: Run server 
         working-directory: ./main_server
-        run: npm run start:test 
+        run: npm run start:test &
+
+      - name: Wait for Node instance to be running
+        run: npx wait-on http://localhost:3000
 
       - name: Run tests
         working-directory: ./main_server
