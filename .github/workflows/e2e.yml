@@ -1,5 +1,9 @@
 name: MongoDB Workflow
 on:
+  pull_request:
+    types: 
+      - opened
+      - synchronize
   workflow_dispatch:
 
 jobs:
@@ -48,8 +52,11 @@ jobs:
       - name: debug
         run: |
           echo "Checking if Node.js server is running..."
-          sleep 10
-          curl http://localhost:3000
+          sleep 5 
+          while ! curl -s http://localhost:3000; do
+            echo "Node.js server not yet available. Retrying in 5 seconds..."
+            sleep 5
+          done
 
       - name: Run tests
         working-directory: ./main_server
