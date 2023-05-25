@@ -19,6 +19,14 @@ jobs:
 
       - name: Navigate to main_server directory
         run: cd main_server
+   
+      - name: Create env.stage.test
+        run: |
+          echo "VAR_NAME=1" >> .env.stage.test
+          echo "MONGO_URI=mongodb://localhost:27017" >> .env.stage.test
+          echo "DB_DATABASE=uprater" >> .env.stage.test
+          echo "JWT_SECRET=bVT8gpxLvd2P(!{wwyAe:[Q@UF(LYev(" >> .env.stage.test
+          echo "COHERE_API_KEY=B3yFEFh14ZrzFoFDBMy6rEFKzBrSsP4qEPQXeSQN" >> .env.stage.test
 
       - name: Install dependencies
         working-directory: ./main_server
@@ -32,6 +40,10 @@ jobs:
       - name: Run migrations
         working-directory: ./main_server
         run: npm run migrate
+
+      - name: Run server 
+        working-directory: ./main_server
+        run: npm run start:test 
 
       - name: Run tests
         working-directory: ./main_server
