@@ -20,11 +20,13 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
 
-    - name: Build and push node container
-      run: |
-        cd main_server
-        docker build -t node:latest .
-        docker push node:latest
+    - name: Build node container
+      working-directory: ./main_server
+      run:  docker build -t node:latest .
+
+    - name: Push node container
+      working-directory: ./main_server
+      run: docker push node:latest
 
     - name: Build and push cohere container
       run: |
