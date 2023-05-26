@@ -19,23 +19,39 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+      with:
+        images: eneko2496/node
 
-    - name: Build node container
+    - name: Build and push Docker image
       working-directory: ./main_server
-      run:  docker build -t node:latest .
+      uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: latest
+        labels: |
+          com.example.build-date=${{ github.event.head_commit.timestamp }}
 
-    - name: Push node container
-      working-directory: ./main_server
-      run: docker push node:latest
+          # - name: Build node container
+          #   working-directory: ./main_server
+          #   run:  docker build -t node:latest .
 
-    - name: Build and push cohere container
-      run: |
-        cd cohere_ms
-        docker build -t cohere-ms:latest .
-        docker push cohere-ms:latest
+          # - name: Push node container
+          #   working-directory: ./main_server
+          #   run: docker push node:latest
 
-    - name: Build and push ui container
-      run: |
-        cd web_app_uprater
-        docker build -t ui:latest .
-        docker push ui:latest
+          # - name: Build and push cohere container
+          #   run: |
+          #     cd cohere_ms
+          #     docker build -t cohere-ms:latest .
+          #     docker push cohere-ms:latest
+
+          # - name: Build and push ui container
+          #   run: |
+          #     cd web_app_uprater
+          #     docker build -t ui:latest .
+          #     docker push ui:latest
