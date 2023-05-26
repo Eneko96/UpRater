@@ -19,13 +19,13 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
         registry: https://index.docker.io/v1/ 
-    - name: Extract metadata (tags, labels) for Docker
+    - name: Extract metadata (tags, labels) for Docker main_server
       id: meta
       uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
       with:
         images: eneko2496/node:latest
 
-    - name: Build and push Docker image
+    - name: Build and push Docker image main_server
       uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
       with:
         context: ./main_server
@@ -33,23 +33,33 @@ jobs:
         tags: eneko2496/node:latest
         labels: |
           com.example.build-date=${{ github.event.head_commit.timestamp }}
+          
+    - name: Extract metadata (tags, labels) for Docker cohere
+      id: meta
+      uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+      with:
+        images: eneko2496/cohere-ms:latest
 
-          # - name: Build node container
-          #   working-directory: ./main_server
-          #   run:  docker build -t node:latest .
+    - name: Build and push Docker image cohere
+      uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+      with:
+        context: ./cohere_ms
+        push: true
+        tags: eneko2496/cohere-ms:latest
+        labels: |
+          com.example.build-date=${{ github.event.head_commit.timestamp }}
 
-          # - name: Push node container
-          #   working-directory: ./main_server
-          #   run: docker push node:latest
+    - name: Extract metadata (tags, labels) for Docker ui
+      id: meta
+      uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+      with:
+        images: eneko2496/ui:latest
 
-          # - name: Build and push cohere container
-          #   run: |
-          #     cd cohere_ms
-          #     docker build -t cohere-ms:latest .
-          #     docker push cohere-ms:latest
-
-          # - name: Build and push ui container
-          #   run: |
-          #     cd web_app_uprater
-          #     docker build -t ui:latest .
-          #     docker push ui:latest
+    - name: Build and push Docker image ui
+      uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+      with:
+        context: ./web_app_uprater
+        push: true
+        tags: eneko2496/ui:latest
+        labels: |
+          com.example.build-date=${{ github.event.head_commit.timestamp }}
