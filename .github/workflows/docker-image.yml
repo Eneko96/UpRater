@@ -30,7 +30,7 @@ jobs:
       with:
         context: ./main_server
         push: true
-        tags: eneko96/node:latest
+        tags: eneko2496/node:latest
         labels: |
           com.example.build-date=${{ github.event.head_commit.timestamp }}
 
