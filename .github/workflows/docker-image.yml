@@ -18,6 +18,7 @@ jobs:
       with:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
+        registry: https://hub.docker.com
 
     - name: Extract metadata (tags, labels) for Docker
       id: meta
