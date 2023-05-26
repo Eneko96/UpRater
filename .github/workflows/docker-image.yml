@@ -35,7 +35,7 @@ jobs:
           com.example.build-date=${{ github.event.head_commit.timestamp }}
           
     - name: Extract metadata (tags, labels) for Docker cohere
-      id: meta
+      id: meta-cohere 
       uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
       with:
         images: eneko2496/cohere-ms:latest
@@ -50,7 +50,7 @@ jobs:
           com.example.build-date=${{ github.event.head_commit.timestamp }}
 
     - name: Extract metadata (tags, labels) for Docker ui
-      id: meta
+      id: meta-ui
       uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
       with:
         images: eneko2496/ui:latest
