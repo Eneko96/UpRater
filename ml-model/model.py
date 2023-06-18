@@ -17,7 +17,7 @@ df.columns = ['sentiment', 'id', 'date', 'query', 'user', 'text']
 
 # Split the dataset into training and testing sets using only 20% of the data
 logging.info("Splitting the dataset...")
-df_train, df_test = train_test_split(df, test_size=0.8, random_state=42)
+df_train, df_test = train_test_split(df, test_size=0.6, random_state=42)
 
 # Preprocess the training data
 logging.info("Preprocessing the training data...")
@@ -31,7 +31,7 @@ y_train = df_train['sentiment']
 
 # Train a Random Forest classifier
 logging.info("Training the Random Forest classifier...")
-model = RandomForestClassifier(n_estimators=100)
+model = RandomForestClassifier(n_estimators=50, n_jobs=-1)
 start_time = time.time()  # Record the start time
 model.fit(X_train, y_train)
 elapsed_time = time.time() - start_time
